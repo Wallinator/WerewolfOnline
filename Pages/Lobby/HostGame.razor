@@ -1,0 +1,193 @@
+﻿@page "/hostgame"
+@inject NavigationManager NavigationManager
+
+
+<div hidden="@GameForm">
+    <h3>HostGame</h3>
+    <div class="form-group">
+        <label>
+            Game Name:
+            <input class="form-control-sm" @bind="_gameName" />
+        </label>
+    </div>
+    <button class="form-control-sm" @onclick="@Host">Host</button>
+    <div class="alert-danger" hidden="@GameFormError">
+        Name already taken or blank.
+    </div>
+</div>
+
+
+<div hidden="@GameOptionsForm">
+    <h3>HostGame</h3>
+    <div class="form-group">
+        <label>
+            Player Name:
+            <input class="form-control-sm" type="text" @bind="@_playerName" />
+            <small class="form-text text-muted">Use a name people can recognise you by!</small>
+        </label>
+        <div>
+            <label>Roles: </label>
+            <div class="row">
+                @foreach (RoleName r in Enum.GetValues(typeof(RoleName))) {
+                    @if (r.Equals(RoleName.None)) { continue; }
+                    <div class="col">
+                        <label>@Enum.GetName(typeof(RoleName), r): </label>
+                    </div>
+                    <div class="col">
+                        <input class="form-control-sm" type="number" @bind="@roles[r]"  min="0" max="@(1 + players.Count)"/>
+                    </div>
+                    <div class="col-9">
+                    </div>
+                    <div class="w-100"></div>
+                }
+            </div>
+        </div>
+        <button @onclick="@Start">Start</button>
+        <br />
+        <input type="checkbox" @bind="@EditPlayers" />
+        Edit Player Options
+        <div hidden="@(!EditPlayers)">
+            <div>
+                Your Role:
+                <select @bind="hostRole">
+                    @foreach (RoleName r in Enum.GetValues(typeof(RoleName))) {
+                        <option value="@r">@Enum.GetName(typeof(RoleName), r)</option>
+                    }
+                </select>
+            </div>
+            @foreach (string p in players) {
+                <div @key="p">
+                    @p's Role:
+                    <select @bind="assigned[p]">
+                        @foreach (RoleName r in Enum.GetValues(typeof(RoleName))) {
+                            <option value="@r">@Enum.GetName(typeof(RoleName), r)</option>
+                        }
+                    </select>
+                </div>
+            }
+        </div>
+
+        @foreach (string e in formErrors) {
+            <div class="alert-danger">
+                @e
+            </div>
+        }
+    </div>
+
+    Lobby Chat:
+    @foreach (string p in messages) {
+        <div>@p</div>
+    }
+</div>
+
+<div hidden="@HidePlayGame">
+    <PlayGame @ref="_playGame" Connect="false"></PlayGame>
+</div>
+
+@code {
+    private PlayGame _playGame;
+    private bool HidePlayGame { get; set; } = true;
+    private bool EditPlayers { get; set; } = false;
+    private bool GameForm { get; set; }
+    private bool GameFormError { get; set; }
+    private bool GameOptionsForm { get; set; }
+    private List<string> messages = new List<string>();
+    private List<string> formErrors = new List<string>();
+    private List<string> players = new List<string>();
+    private HubConnection _hubConnection;
+    private RoleName hostRole;
+    private Dictionary<string, RoleName> assigned = new Dictionary<string, RoleName>();
+    private Dictionary<string, bool> storyTellers = new Dictionary<string, bool>();
+    private Dictionary<RoleName, int> roles = new Dictionary<RoleName, int>();
+    private string _gameName;
+    private string _playerName = "";
+    private int gameId;
+
+
+    protected override async Task OnInitializedAsync() {
+        foreach (RoleName r in Enum.GetValues(typeof(RoleName))) {
+            if (r.Equals(RoleName.None)) { continue; }
+            roles[r] = 0;
+        }
+        HideAll();
+        GameForm = false;
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/lobbyhub"))
+            .Build();
+
+        _hubConnection.On<string>(LobbyClientMethod.MessageReceived, (message) => {
+            messages.Add(message);
+            StateHasChanged();
+        });
+        _hubConnection.On<string>(LobbyClientMethod.PlayerJoined, (player) => {
+            players.Add(player);
+            assigned[player] = RoleName.None;
+            StateHasChanged();
+        });
+
+        await _hubConnection.StartAsync();
+    }
+    async void Host() {
+        int result = await _hubConnection.InvokeAsync<int>(LobbyHubMethod.CreateGame, _gameName);
+        gameId = result;
+        if (result < 0) {
+            GameFormError = false;
+            Console.WriteLine("error");
+        }
+        else {
+            Console.WriteLine("game amde");
+            HideAll();
+            GameOptionsForm = false;
+        }
+        StateHasChanged();
+    }
+
+    async void Start() {
+
+        formErrors.Clear();
+        var r = new List<RoleName>();
+        foreach (var key in roles.Keys) {
+            for (int i = 0; i < roles[key]; ++i) {
+                r.Add(key);
+            }
+        }
+        if (players.Count + 1 != r.Count) {
+            formErrors.Add("Roles in game must equal number of players.");
+        }
+
+        var l1 = r.ToLookup(x => x);
+        var l3 = assigned.Values.ToList();
+        l3.RemoveAll(x => x == RoleName.None);
+        var l2 = l3.ToLookup(x => x);
+        var check = l2.All(xs => xs.Count() <= l1[xs.Key].Count());
+
+        if (!check) {
+            formErrors.Add("More roles assigned than in game.");
+        }
+        if (formErrors.Count != 0) {
+            StateHasChanged();
+            return;
+        }
+        assigned[_playerName] = hostRole;
+        bool result = await _hubConnection.InvokeAsync<bool>(LobbyHubMethod.StartGame, _playerName, r, assigned);
+        if (!result) {
+            formErrors.Insert(0, "Name is already taken or blank or game does not exist.");
+            Console.WriteLine("start game error");
+        }
+        else {
+            HideAll();
+            await _hubConnection.DisposeAsync();
+            Console.WriteLine("connection disposed");
+            HidePlayGame = false;
+            await _playGame.HostJoin(_playerName, _gameName, gameId);
+            Console.WriteLine("started game host");
+        }
+        StateHasChanged();
+    }
+
+    private void HideAll() {
+        GameForm = true;
+        GameFormError = true;
+        GameOptionsForm = true;
+    }
+}

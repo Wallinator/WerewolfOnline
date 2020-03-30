@@ -1,0 +1,15 @@
+﻿@inject NavigationManager NavigationManager
+@inherits RoleComponentBase
+
+<h3>Spectator</h3>
+<RoleComponent events="events" @ref="roleComponent" />
+
+@code {
+
+    protected override NavigationManager _NavigationManager { get => NavigationManager; }
+    protected override RoleName _Role { get => RoleName.Spectator; }
+    protected override void SetRoleListeners() {
+
+    }
+
+}

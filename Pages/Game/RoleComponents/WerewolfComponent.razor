@@ -1,0 +1,15 @@
+﻿@inject NavigationManager NavigationManager
+@inherits RoleComponentBase
+
+<h3>WerewolfComponent</h3>
+<RoleComponent events="events" @ref="roleComponent" />
+
+@code {
+
+    protected override NavigationManager _NavigationManager { get => NavigationManager; }
+    protected override RoleName _Role { get => RoleName.Werewolf; }
+    protected override void SetRoleListeners() {
+
+    }
+
+}

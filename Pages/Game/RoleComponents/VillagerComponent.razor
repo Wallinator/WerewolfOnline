@@ -1,0 +1,14 @@
+﻿@inject NavigationManager NavigationManager
+@inherits RoleComponentBase
+
+<h3>VillagerComponent</h3>
+
+<RoleComponent events="events" @ref="roleComponent" />
+@code {
+
+    protected override NavigationManager _NavigationManager { get => NavigationManager; }
+    protected override RoleName _Role { get => RoleName.Villager; }
+    protected override void SetRoleListeners() {
+
+    }
+}

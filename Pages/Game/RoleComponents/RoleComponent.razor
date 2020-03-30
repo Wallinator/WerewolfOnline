@@ -1,0 +1,12 @@
+﻿<PollComponent @ref="@pollComponent" />
+
+@foreach (string e in events) {
+    <div>
+        @e
+    </div>
+}
+@code {
+    [Parameter]
+    public List<string> events { get; set; }
+    public PollComponent pollComponent { get; set; }
+}

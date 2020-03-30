@@ -1,0 +1,33 @@
+﻿
+
+<div hidden="@Hidden">
+    <h5>@title</h5>
+    <div class="text-muted">@instruction</div>
+    @foreach (string option in options) {
+        <button @onclick="@(() => Submit(option))">@option</button>
+    }
+</div>
+
+@code {
+    private List<string> options = new List<string>();
+    public bool Hidden { get; set; } = true;
+    public int gameId { get; set; }
+    public HubConnection _hubConnection { get; set; }
+    private PollType Type;
+    private string title = "";
+    private string instruction = "";
+
+    public void SetPoll(PollType type, List<string> options) {
+        Type = type;
+        this.options = options;
+        title = PollDetails.titles[type];
+        instruction = PollDetails.instructions[type];
+        Hidden = false;
+        StateHasChanged();
+    }
+    async void Submit(string v) {
+        await _hubConnection.InvokeAsync(PlayerHubMethod.ReceiveVote, gameId, v, Type);
+        Hidden = true;
+        StateHasChanged();
+    }
+}

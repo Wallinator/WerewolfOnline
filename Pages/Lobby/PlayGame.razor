@@ -1,0 +1,130 @@
+﻿@page "/playgame/{GameId:int}"
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject NavigationManager NavigationManager
+@inject DataService ds
+
+
+<h3>PlayGame</h3>
+
+<div hidden="@RegisterForm">
+    <div class="form-group">
+        <label>
+            Username:
+            <input class="form-control-sm" @bind="_name" />
+            <small class="form-text text-muted">Use a name people can recognise you by!</small>
+        </label>
+    </div>
+    <button class="form-control-sm" @onclick="@Register">Submit</button>
+
+    <div class="alert-danger" hidden="@RegisterFormError">
+        Name already taken.
+    </div>
+</div>
+<div hidden="@Lobby">
+    Lobby Chat:
+    <div class="form-group">
+        <input class="form-control-sm" @bind="_message" />
+    </div>
+    <button class="form-control-sm" @onclick="@SendMessage">Send</button>
+    @foreach (string p in messages) {
+        <div>@p</div>
+    }
+</div>
+<div hidden="@GameStart">
+    Game Started!
+</div>
+
+
+@code {
+    [Parameter]
+    public bool Connect { get; set; } = true;
+
+    [Parameter]
+    public int GameId { get; set; }
+    private string _message { get; set; }
+
+
+    public bool RegisterForm { get; set; }
+
+    public bool RegisterFormError { get; set; }
+
+    public bool Lobby { get; set; }
+
+    public bool GameStart { get; set; }
+
+    private List<string> messages = new List<string>();
+    public HubConnection _hubConnection { get; set; }
+    private string _name;
+
+
+    protected override async Task OnInitializedAsync() {
+        if (Connect) {
+            _hubConnection = new HubConnectionBuilder()
+                .WithUrl(NavigationManager.ToAbsoluteUri("/lobbyhub"))
+                .WithAutomaticReconnect()
+                .Build();
+            SetListeners();
+            await _hubConnection.StartAsync();
+            HideAll();
+            RegisterForm = false;
+        }
+    }
+
+    private void SetListeners() {
+
+        _hubConnection.On<RoleName>(LobbyClientMethod.GameStarted, (role) => {
+            HideAll();
+            GameStart = false;
+            StateHasChanged();
+            NavigationManager.NavigateTo("playgame/" + GameId + "/" + (int)role);
+        });
+        _hubConnection.On<string>(LobbyClientMethod.MessageReceived, (message) => {
+            messages.Add(message);
+            StateHasChanged();
+        });
+    }
+
+
+    public async Task HostJoin(string username, string gamename, int gameid) {
+        GameId = gameid;
+        HideAll();
+        _hubConnection = new HubConnectionBuilder()
+                .WithUrl(NavigationManager.ToAbsoluteUri("/lobbyhub"))
+                .WithAutomaticReconnect()
+                .Build();
+        SetListeners();
+        await _hubConnection.StartAsync();
+        Console.WriteLine("host connection complete");
+        await _hubConnection.InvokeAsync(LobbyHubMethod.HostJoin, username, gamename);
+        Console.WriteLine("host joined");
+        GameStart = false;
+        await ProtectedSessionStore.SetAsync("name", username);
+
+        StateHasChanged();
+    }
+    async void SendMessage() {
+        await _hubConnection.InvokeAsync(LobbyHubMethod.MessageSent, _message, GameId);
+        _message = "";
+        StateHasChanged();
+    }
+    private void HideAll() {
+        RegisterForm = true;
+        RegisterFormError = true;
+        Lobby = true;
+        GameStart = true;
+    }
+
+    async void Register() {
+        bool result = await _hubConnection.InvokeAsync<bool>(LobbyHubMethod.Register, _name, GameId);
+        if (result) {
+            await ProtectedSessionStore.SetAsync("name", _name);
+            HideAll();
+            Lobby = false;
+            messages = await _hubConnection.InvokeAsync<List<string>>(LobbyHubMethod.MessageListById, GameId);
+        }
+        else {
+            RegisterFormError = false;
+        }
+        StateHasChanged();
+    }
+}
