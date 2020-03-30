@@ -16,7 +16,6 @@ namespace WerewolfOnline.Model {
 		public IHubContext<PlayerHub, IPlayerHub> _hubContext;
 		public List<string> messages = new List<string>();
 		public bool accepting = true;
-		public int Id;
 		public string Host;
 		public string Name;
 		public List<Player> Players = new List<Player>();

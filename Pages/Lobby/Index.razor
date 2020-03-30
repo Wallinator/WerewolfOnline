@@ -3,33 +3,33 @@
 @inject ProtectedSessionStorage ProtectedSessionStore
 @inject DataService dataService
 @inject NavigationManager NavigationManager
-
 Welcome to your new app.
 <div></div>
 <button @onclick="Host">Host</button>
 
 <hr>
 
+@if (dataService.GameExists) {
+    <div>@game.Name</div>
+    <button @onclick="@Join">Join</button>
+}
+else {
 <div>
-    @foreach (var gm in gamesList) {
-        <div>@gm.Name</div>
-        <button @onclick="@(() => Join(gm.Id))">Join</button>
-    }
-</div>
-<div hidden="@(gamesList.Count != 0)">
-    No games to join!
-</div>
+    No game to join!
+</div>}
 
 @code {
-    List<GameManager> gamesList;
+    GameManager game;
     protected override async Task OnInitializedAsync() {
-        gamesList = dataService.GameList;
+        if (dataService.GameExists) {
+            game = dataService.Game;
+        }
         await base.OnInitializedAsync();
     }
 
 
-    void Join(int i) {
-        NavigationManager.NavigateTo("/playgame/" + i);
+    void Join() {
+        NavigationManager.NavigateTo("/playgame");
     }
     void Host() {
         NavigationManager.NavigateTo("/hostgame");

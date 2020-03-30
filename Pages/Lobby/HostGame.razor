@@ -101,7 +101,6 @@
     private Dictionary<RoleName, int> roles = new Dictionary<RoleName, int>();
     private string _gameName;
     private string _playerName = "";
-    private int gameId;
 
 
     protected override async Task OnInitializedAsync() {
@@ -128,9 +127,8 @@
         await _hubConnection.StartAsync();
     }
     async void Host() {
-        int result = await _hubConnection.InvokeAsync<int>(LobbyHubMethod.CreateGame, _gameName);
-        gameId = result;
-        if (result < 0) {
+        bool CreateGameSuccess = await _hubConnection.InvokeAsync<bool>(LobbyHubMethod.CreateGame, _gameName);
+        if (!CreateGameSuccess) {
             GameFormError = false;
             Console.WriteLine("error");
         }
@@ -179,7 +177,7 @@
             await _hubConnection.DisposeAsync();
             Console.WriteLine("connection disposed");
             HidePlayGame = false;
-            await _playGame.HostJoin(_playerName, _gameName, gameId);
+            await _playGame.HostJoin(_playerName);
             Console.WriteLine("started game host");
         }
         StateHasChanged();

@@ -15,9 +15,9 @@ namespace WerewolfOnline.Hubs {
             _hubContext = hubContext;
             DataService = dataService;
         }
-        public async Task MessageSent(string message, int gameId) {
-            GameManager gm = DataService.GameList.FirstOrDefault(x => x.Id == gameId);
-            if (gm.Equals(null)) {
+        public async Task MessageSent(string message) {
+            GameManager gm = DataService.Game;
+            if (!DataService.GameExists) {
                 return;
             }
             if (gm.Players.Exists(x => x.Id == Context.ConnectionId) && gm.accepting) {
@@ -32,9 +32,9 @@ namespace WerewolfOnline.Hubs {
                 Console.WriteLine(message);
             }
         }
-        public async Task<bool> Register(string username, int gameId) {
-            GameManager gm = DataService.GameList.FirstOrDefault(x => x.Id == gameId);
-            if (gm.Equals(null)) {
+        public async Task<bool> Register(string username) {
+            GameManager gm = DataService.Game;
+            if (!DataService.GameExists) {
                 return false;
             }
             if (!string.IsNullOrWhiteSpace(username) && gm.accepting && !gm.Players.Exists(x => x.Name == username)) {
@@ -53,9 +53,9 @@ namespace WerewolfOnline.Hubs {
             }
             return false;
         }
-        public bool Relog(string username, int gameId) {
-            GameManager gm = DataService.GameList.FirstOrDefault(x => x.Id == gameId);
-            if (gm.Equals(null)) {
+        public bool Relog(string username) {
+            GameManager gm = DataService.Game;
+            if (!DataService.GameExists) {
                 return false;
             }
             Player p = gm.Players.FirstOrDefault(x => x.Name == username);
@@ -67,18 +67,18 @@ namespace WerewolfOnline.Hubs {
             return false;
         }
 
-        public int CreateGame(string GameName) {
-            if (string.IsNullOrWhiteSpace(GameName) || DataService.GameList.Exists(x => x.Name.Equals(GameName))) {
-                return -1;
+        public bool CreateGame(string GameName) {
+            if (string.IsNullOrWhiteSpace(GameName) || DataService.GameExists) {
+                return false;
             }
             GameManager gm = new GameManager {
-                Id = DataService.GetNextGameId(),
                 Host = Context.ConnectionId,
                 Name = GameName,
                 _hubContext = _hubContext
             };
-            DataService.GameList.Add(gm);
-            return gm.Id;
+            DataService.Game = gm;
+            DataService.GameExists = true;
+            return true;
         }
 
         public async Task<bool> StartGame(string username, List<RoleName> roles, Dictionary<string, RoleName> assigned) {
@@ -90,7 +90,7 @@ namespace WerewolfOnline.Hubs {
                 Console.WriteLine(key + " : " + Enum.GetName(typeof(RoleName), assigned[key]));
             }
             Console.WriteLine("parameters pass");
-            GameManager gm = DataService.GameList.FirstOrDefault(x => x.Host == Context.ConnectionId);
+            GameManager gm = DataService.Game;
             GameOptions options = new GameOptions() {
                 Roles = roles,
                 AssignedRoles = assigned
@@ -99,15 +99,15 @@ namespace WerewolfOnline.Hubs {
             if (gm.Equals(null)) {
                 return false;
             }
-            if (!await Register(username, gm.Id)) {
+            if (!await Register(username)) {
                 return false;
             };
             gm.accepting = false;
             gm.Options = options;
             return true;
         }
-        public void HostJoin(string username, string gameName) {
-            GameManager gm = DataService.GameList.FirstOrDefault(x => x.Name == gameName);
+        public void HostJoin(string username) {
+            GameManager gm = DataService.Game;
             gm.Players.First(x => x.Name == username).Id = Context.ConnectionId;
             gm.gs = new GameState(gm.Players);
             gm.Init();
@@ -116,34 +116,17 @@ namespace WerewolfOnline.Hubs {
                 Clients.Client(p.Id).GameStarted(p.Role.Name);
             }
         }
-        public List<string> MessageListById(int GameId) {
-            GameManager gm = DataService.GameList.FirstOrDefault(x => x.Id == GameId);
+        public List<string> MessageListById() {
+            GameManager gm = DataService.Game;
             return gm.messages;
         }
-        /*public List<string> PlayerListById(int GameId) {
-            GameManager gm = DataService.GameList.FirstOrDefault(x => x.Id == GameId);
-            List<string> l = new List<string>();
-            foreach (Player p in gm.Players) {
-                l.Add(p.Name);
-            }
-            return l;
-        }
-        public List<string> PlayerListByName(string GameName) {
-            GameManager gm = DataService.GameList.FirstOrDefault(x => x.Name == GameName);
-            List<string> l = new List<string>();
-            foreach (Player p in gm.Players) {
-                l.Add(p.Name);
-            }
-            return l;
-        }*/
+
 
     }
 
     public static class LobbyHubMethod {
         public static readonly string Register = "Register";
         public static readonly string MessageListById = "MessageListById";
-        //public static readonly string PlayerListById = "PlayerListById";
-        //public static readonly string PlayerListByName = "PlayerListByName";
         public static readonly string MessageSent = "MessageSent";
         public static readonly string CreateGame = "CreateGame";
         public static readonly string StartGame = "StartGame";

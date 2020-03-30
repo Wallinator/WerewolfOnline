@@ -1,4 +1,4 @@
-﻿@page "/playgame/{GameId:int}"
+﻿@page "/playgame"
 @inject ProtectedSessionStorage ProtectedSessionStore
 @inject NavigationManager NavigationManager
 @inject DataService ds
@@ -39,8 +39,6 @@
     [Parameter]
     public bool Connect { get; set; } = true;
 
-    [Parameter]
-    public int GameId { get; set; }
     private string _message { get; set; }
 
 
@@ -76,7 +74,7 @@
             HideAll();
             GameStart = false;
             StateHasChanged();
-            NavigationManager.NavigateTo("playgame/" + GameId + "/" + (int)role);
+            NavigationManager.NavigateTo("playgame/" + "/" + (int)role);
         });
         _hubConnection.On<string>(LobbyClientMethod.MessageReceived, (message) => {
             messages.Add(message);
@@ -85,8 +83,7 @@
     }
 
 
-    public async Task HostJoin(string username, string gamename, int gameid) {
-        GameId = gameid;
+    public async Task HostJoin(string username) {
         HideAll();
         _hubConnection = new HubConnectionBuilder()
                 .WithUrl(NavigationManager.ToAbsoluteUri("/lobbyhub"))
@@ -95,7 +92,7 @@
         SetListeners();
         await _hubConnection.StartAsync();
         Console.WriteLine("host connection complete");
-        await _hubConnection.InvokeAsync(LobbyHubMethod.HostJoin, username, gamename);
+        await _hubConnection.InvokeAsync(LobbyHubMethod.HostJoin, username);
         Console.WriteLine("host joined");
         GameStart = false;
         await ProtectedSessionStore.SetAsync("name", username);
@@ -103,7 +100,7 @@
         StateHasChanged();
     }
     async void SendMessage() {
-        await _hubConnection.InvokeAsync(LobbyHubMethod.MessageSent, _message, GameId);
+        await _hubConnection.InvokeAsync(LobbyHubMethod.MessageSent, _message);
         _message = "";
         StateHasChanged();
     }
@@ -115,12 +112,12 @@
     }
 
     async void Register() {
-        bool result = await _hubConnection.InvokeAsync<bool>(LobbyHubMethod.Register, _name, GameId);
+        bool result = await _hubConnection.InvokeAsync<bool>(LobbyHubMethod.Register, _name);
         if (result) {
             await ProtectedSessionStore.SetAsync("name", _name);
             HideAll();
             Lobby = false;
-            messages = await _hubConnection.InvokeAsync<List<string>>(LobbyHubMethod.MessageListById, GameId);
+            messages = await _hubConnection.InvokeAsync<List<string>>(LobbyHubMethod.MessageListById);
         }
         else {
             RegisterFormError = false;

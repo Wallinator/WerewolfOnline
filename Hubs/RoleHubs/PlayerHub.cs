@@ -12,8 +12,8 @@ namespace WerewolfOnline.Hubs {
         public PlayerHub(DataService dataService) {
             DataService = dataService;
         }
-        public bool Relog(string username, int gameId, RoleName role) {
-            GameManager gm = DataService.GameList.FirstOrDefault(x => x.Id == gameId);
+        public bool Relog(string username, RoleName role) {
+            GameManager gm = DataService.Game;
             if (gm.Equals(null)) {
                 return false;
             }
@@ -29,8 +29,8 @@ namespace WerewolfOnline.Hubs {
             }
             return false;
         }
-        public void ReceiveVote(int gameId, string vote, PollType type) {
-            GameManager gm = DataService.GameList.FirstOrDefault(x => x.Id == gameId);
+        public void ReceiveVote(string vote, PollType type) {
+            GameManager gm = DataService.Game;
             Player p = gm.Players.FirstOrDefault(x => x.Id.Equals(Context.ConnectionId));
             if (p.Equals(null)) {
                 return;

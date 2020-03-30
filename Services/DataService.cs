@@ -7,13 +7,8 @@ using WerewolfOnline.Model;
 namespace WerewolfOnline.Services {
 	public
 		class DataService {
-		private int i = 0;
-		public List<GameManager> GameList;
-		public DataService() {
-			GameList = new List<GameManager>();
-		}
-		public int GetNextGameId() {
-			return ++i;
-		}
+
+		public GameManager Game;
+		public bool GameExists = false;
 	}
 }
