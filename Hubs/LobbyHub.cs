@@ -9,9 +9,9 @@ using WerewolfOnline.Services;
 namespace WerewolfOnline.Hubs {
     public class LobbyHub : Hub<ILobbyHub> {
         
-        private readonly DataService DataService;
+        private readonly IDataService DataService;
         private readonly IHubContext<PlayerHub, IPlayerHub> _hubContext;
-        public LobbyHub(DataService dataService, IHubContext<PlayerHub, IPlayerHub> hubContext) {
+        public LobbyHub(IDataService dataService, IHubContext<PlayerHub, IPlayerHub> hubContext) {
             _hubContext = hubContext;
             DataService = dataService;
         }

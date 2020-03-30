@@ -8,8 +8,8 @@ using WerewolfOnline.Services;
 
 namespace WerewolfOnline.Hubs {
     public partial class PlayerHub : Hub<IPlayerHub> {
-            protected DataService DataService;
-        public PlayerHub(DataService dataService) {
+            protected IDataService DataService;
+        public PlayerHub(IDataService dataService) {
             DataService = dataService;
         }
         public bool Relog(string username, RoleName role) {

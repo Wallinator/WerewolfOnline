@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WerewolfOnline.Hubs;
 using WerewolfOnline.Services;
+using WerewolfOnline.Services.Implementation;
 
 namespace WerewolfOnline {
 	public class Startup {
@@ -25,7 +26,7 @@ namespace WerewolfOnline {
 			services.AddServerSideBlazor();
 			services.AddSignalRCore();
 			services.AddProtectedBrowserStorage();
-			services.AddSingleton<DataService>();
+			services.AddSingleton<IDataService, DataService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

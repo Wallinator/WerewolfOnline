@@ -4,11 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using WerewolfOnline.Model;
 
-namespace WerewolfOnline.Services {
+namespace WerewolfOnline.Services.Implementation {
 	public
-		class DataService {
-
-		public GameManager Game;
-		public bool GameExists = false;
+		class DataService : IDataService {
+		public GameManager Game { get; set; }
+		public bool GameExists { get; set; } = false;
 	}
 }
