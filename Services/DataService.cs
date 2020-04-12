@@ -9,5 +9,7 @@ namespace WerewolfOnline.Services.Implementation {
 		class DataService : IDataService {
 		public GameManager Game { get; set; }
 		public bool GameExists { get; set; } = false;
+		public bool LobbyExists { get; set; } = false;
+		public Lobby Lobby { get; set; }
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using WerewolfOnline.Model.Structure;
 
 namespace WerewolfOnline.Model.Phases {
 	public abstract class AbstractPhase {

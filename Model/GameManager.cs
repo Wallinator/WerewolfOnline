@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using WerewolfOnline.Hubs;
 using WerewolfOnline.Model;
 using WerewolfOnline.Model.Phases;
+using WerewolfOnline.Model.Structure;
 using WerewolfOnline.Services;
 
 namespace WerewolfOnline.Model {

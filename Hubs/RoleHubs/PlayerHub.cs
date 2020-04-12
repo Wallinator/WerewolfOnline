@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using WerewolfOnline.Model;
+using WerewolfOnline.Model.Structure;
 using WerewolfOnline.Services;
 
 namespace WerewolfOnline.Hubs {

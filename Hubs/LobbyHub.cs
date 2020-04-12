@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using WerewolfOnline.Model;
+using WerewolfOnline.Model.Structure;
 using WerewolfOnline.Services;
 
 namespace WerewolfOnline.Hubs {
@@ -16,18 +17,18 @@ namespace WerewolfOnline.Hubs {
             DataService = dataService;
         }
         public async Task MessageSent(string message) {
-            GameManager gm = DataService.Game;
-            if (!DataService.GameExists) {
+            Lobby lobby = DataService.Lobby;
+            if (!DataService.LobbyExists) {
                 return;
             }
-            if (gm.Players.Exists(x => x.Id == Context.ConnectionId) && gm.accepting) {
-                Player player = gm.Players.Find(x => x.Id == Context.ConnectionId);
+            if (lobby.Players.Exists(x => x.Id == Context.ConnectionId) && lobby.accepting) {
+                Player player = lobby.Players.Find(x => x.Id == Context.ConnectionId);
                 message = player.Name.Trim() + ": " + message;
-                gm.messages.Add(message);
-                foreach (Player p in gm.Players) {
+                lobby.messages.Add(message);
+                foreach (Player p in lobby.Players) {
                     await Clients.Client(p.Id).MessageReceived(message);
                 }
-                await Clients.Client(gm.Host).MessageReceived(message);
+                await Clients.Client(lobby.Host).MessageReceived(message);
                 
                 Console.WriteLine(message);
             }

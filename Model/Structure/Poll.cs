@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WerewolfOnline.Model {
+namespace WerewolfOnline.Model.Structure {
 	public class Poll {
 		public bool Closed { get; set; } = false;
 		public List<string> Highest = new List<string>();

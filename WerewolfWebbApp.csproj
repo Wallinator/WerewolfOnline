@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <StartupObject>WerewolfOnline.Program</StartupObject>
+    <Configurations>Debug;Release;new</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
