@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using WerewolfDomain.Play;
+using WerewolfDomain.Entities;
 
 namespace WerewolfDomain.Structures {
 	public readonly struct Vote<T> {

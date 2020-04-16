@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WerewolfDomain.Player.Roles {
+namespace WerewolfDomain.Roles {
     internal static class RoleFactory {
 
         internal static Role MakeRole(RoleName name) {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WerewolfDomain.Play;
+using WerewolfDomain.Entities;
 
 namespace WerewolfDomain.Structures {
 	public class Poll<T> {

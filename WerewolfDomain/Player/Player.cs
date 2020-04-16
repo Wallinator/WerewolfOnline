@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WerewolfDomain.Player.Roles;
+using WerewolfDomain.Roles;
 
-namespace WerewolfDomain.Player {
+namespace WerewolfDomain.Entities {
     public class Player {
         public string Id;
         public string Name;
@@ -20,15 +20,12 @@ namespace WerewolfDomain.Player {
 
         public override bool Equals(object obj) {
             return obj is Player player &&
-                   Id == player.Id &&
-                   Name == player.Name;
+                   Id == player.Id;
         }
 
         public override int GetHashCode() {
-            return HashCode.Combine(Id, Name);
+            return HashCode.Combine(Id);
         }
-
-
     }
 }
 
