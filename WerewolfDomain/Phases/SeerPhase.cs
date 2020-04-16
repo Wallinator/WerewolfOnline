@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WerewolfOnline.Model.Phases {
+namespace WerewolfDomain.Phases {
 	public class SeerPhase : AbstractPhase {
 		List<Poll> polls = new List<Poll>();
 

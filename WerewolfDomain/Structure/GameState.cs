@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using WerewolfOnline.Model.Phases;
 
-namespace WerewolfOnline.Model.Structure {
+namespace WerewolfDomain.Structure {
 	public class GameState {
 		public List<Player> Players;
 		public List<Player> Alive;

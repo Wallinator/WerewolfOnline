@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace WerewolfOnline.Model.Phases {
-	public class IntroductionPhase : AbstractPhase {
-		private Poll poll;
+namespace WerewolfDomain.Phases {
+	public class VotePhase : AbstractPhase {
+		Poll poll;
 
 		protected override int DefaultDuration => throw new NotImplementedException();
 
-		public IntroductionPhase(GameManager gameManager, AbstractPhase nextPhase, int durationSeconds = 0) : base(gameManager, nextPhase) {
+		public VotePhase(GameManager gameManager, AbstractPhase nextPhase) : base(gameManager, nextPhase) {
 		}
 
-		public IntroductionPhase(GameManager gameManager, PhaseType nextPhaseType, int durationSeconds = 0) : base(gameManager, nextPhaseType) {
+		public VotePhase(GameManager gameManager, PhaseType nextPhaseType) : base(gameManager, nextPhaseType) {
 		}
 
 		protected override bool CanResolve() {
@@ -25,8 +24,11 @@ namespace WerewolfOnline.Model.Phases {
 			gm.gs.Resolved.Add(poll);
 		}
 
-		public override void SetUp() {               
-			poll = new Poll(gm.gs.Alive, new List<string>() { "Ready" }, PollType.Ready);
+		public override void SetUp() {
+			List<string> options = new List<string>(gm.gs.Alive
+				.Select(x => x.Name)
+				);
+			poll = new Poll(gm.gs.Alive, options, PollType.Villager);
 			gm.AddPoll(poll);
 			IsSetup = true;
 		}

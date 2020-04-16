@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WerewolfOnline.Model.Phases {
+namespace WerewolfDomain.Phases {
 	public class StoryPhase : AbstractPhase {
 		public StoryPhase(GameManager gameManager, AbstractPhase nextPhase) : base(gameManager, nextPhase) {
 		}
