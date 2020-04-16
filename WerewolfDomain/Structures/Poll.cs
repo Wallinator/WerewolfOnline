@@ -2,61 +2,60 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WerewolfDomain.Play;
 
-namespace WerewolfDomain.Structure {
-	public class Poll {
+namespace WerewolfDomain.Structures {
+	public class Poll<T> {
+
+		private List<Player> Voted = new List<Player>();
+		public Dictionary<T, int> Results = new Dictionary<T, int>();
 		public bool Closed { get; set; } = false;
-		public List<string> Highest = new List<string>();
-		public Dictionary<string, int> Results = null;
-		public Dictionary<string, List<Player>> Votes = new Dictionary<string, List<Player>>();
-		public List<Player> Voted = new List<Player>();
+		public List<Vote<T>> Votes = new List<Vote<T>>();
 		public List<Player> Voters;
-		public List<string> Nominees;
+		public List<T> Choices;
 		public PollType Type;
-		public Poll(List<Player> voters, List<string> nominees, PollType type) {
-			Nominees = nominees;
+
+		public Poll(List<Player> voters, List<T> nominees, PollType type) {
+			Choices = nominees;
 			Type = type;
 			Voters = voters;
-			foreach (string s in Nominees) {
-				Votes[s] = new List<Player>();
+			foreach (T choice in Choices) {
+				Results[choice] = 0;
 			}
 		}
-		public bool Vote(Player voter, string vote) {
-			if (Closed || !Voters.Contains(voter)) {
+		public bool Vote(Vote<T> vote) {
+			if (Closed || !Voters.Contains(vote.Voter)) {
 				return false;
 			}
 
-			if (Voted.Contains(voter)) {
-				foreach (List<Player> list in Votes.Values) {
-					list.Remove(voter);
-				}
+			if (Voted.Contains(vote.Voter)) {
+				RemoveVote(vote);
 			}
 			else {
-				Voted.Add(voter);
+				Voted.Add(vote.Voter);
 			}
-			Votes[vote].Add(voter);
+
+			AddVote(vote);
 
 			if (Voted.Count == Voters.Count) {
 				ClosePoll();
 			}
+
 			return true;
+		}
+
+		private void AddVote(Vote<T> vote) {
+			Votes.Add(vote);
+			++Results[vote.Choice];
+		}
+
+		private void RemoveVote(Vote<T> vote) {
+			Votes.RemoveAll(x => x.Voter.Equals(vote.Voter));
+			--Results[vote.Choice];
 		}
 
 		public void ClosePoll() {
 			Closed = true;
-			Results = new Dictionary<string, int>();
-			int highestNum = 0;
-			foreach (string vote in Votes.Keys) {
-				Results[vote] = Votes[vote].Count;
-				if (Results[vote] > highestNum) {
-					Highest.Clear();
-					Highest.Add(vote);
-					highestNum = Results[vote];
-				}
-				if (Results[vote] == highestNum) {
-					Highest.Add(vote);
-				}
-			}
 		}
 
 	}
@@ -67,6 +66,7 @@ namespace WerewolfDomain.Structure {
 		Ready,
 		Sleep
 	}
+	/*
 	public static class PollDetails {
 		public static Dictionary<PollType, string> titles = new Dictionary<PollType, string> {
 			{ PollType.Werewolf, "werewolf poll title" },
@@ -82,5 +82,5 @@ namespace WerewolfDomain.Structure {
 			{ PollType.Ready, "Ready up!" },
 			{ PollType.Sleep, "Close your eyes!" }
 		};
-	}
+	}*/
 }

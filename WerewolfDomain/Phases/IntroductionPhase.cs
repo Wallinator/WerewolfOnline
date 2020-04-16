@@ -6,7 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using WerewolfDomain.Exceptions;
 using WerewolfDomain.Interfaces;
-using WerewolfDomain.Structure;
+using WerewolfDomain.Play;
+using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Phases {
 	internal class IntroductionPhase : PresentingPhase {

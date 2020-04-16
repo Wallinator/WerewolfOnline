@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WerewolfDomain.Structure;
+using WerewolfDomain.Play;
 
 namespace WerewolfDomain.Interfaces {
 	public interface Presentor {
