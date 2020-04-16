@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WerewolfDomain.Player.Role {
+namespace WerewolfDomain.Player.Roles {
     internal static class RoleFactory {
 
-        public static Role MakeRole(RoleName name) {
+        internal static Role MakeRole(RoleName name) {
             return name switch
             {
                 RoleName.None => new Role(),

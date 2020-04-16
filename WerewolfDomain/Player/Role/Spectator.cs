@@ -1,4 +1,4 @@
-﻿namespace WerewolfDomain.Player.Role {
+﻿namespace WerewolfDomain.Player.Roles {
     public class Spectator : Role {
         public Role OldRole;
         public Spectator(Role oldRole = null) {
