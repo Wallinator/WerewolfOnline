@@ -9,10 +9,11 @@ namespace PhaseTests.Mocks {
 		public bool PhaseResolveCalled = false;
 		public bool PhaseSetUpCalled = false;
 		public bool PreForceResolveCalled = false;
-		public PhaseTestImpl(PhaseFactory factory, Action<Phase> setPhaseAction, int msDuration, int Id, bool ShouldResolve) : base(factory, setPhaseAction, msDuration) {
+		public PhaseTestImpl(PhaseFactory factory, int Id, bool ShouldResolve) : base(factory) {
 			this.Id = Id;
 			this.ShouldResolve = ShouldResolve;
 		}
+
 
 		protected override bool CanResolve() {
 			CanResolveCalled = true;

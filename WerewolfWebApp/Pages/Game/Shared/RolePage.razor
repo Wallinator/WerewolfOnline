@@ -1,0 +1,137 @@
+﻿@layout EmptyLayout
+@page "/playgame/{GameId:int}/{RoleSwitch:int}"
+@inject NavigationManager NavigationManager
+@inject ProtectedSessionStorage ProtectedSessionStore
+<div class="sidebar">
+    <div class="top-row pl-4 navbar navbar-dark">
+        <a class="navbar-brand text-white" @onclick="@(() => HideAllExcept(ref HideRole))">WerewolfWebApp</a>
+        <button class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+
+    <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+        <ul class="nav flex-column">
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" @onclick="@(() => HideAllExcept(ref HideRole))" Match="NavLinkMatch.All">
+                    <span class="oi oi-home" aria-hidden="true"></span> Home
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" @onclick="@(() => HideAllExcept(ref HideEvents))">
+                    <span class="oi oi-moon" aria-hidden="true"></span> Events
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" @onclick="@(() => HideAllExcept(ref HideStatus))">
+                    <span class="oi oi-pulse" aria-hidden="true"></span> Game Status
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" @onclick="@(() => HideAllExcept(ref HideInfo))">
+                    <span class="oi oi-people" aria-hidden="true"></span> Role Info
+                </NavLink>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="main">
+    <div class="top-row px-4">
+    </div>
+
+    <div class="content px-4">
+        <div hidden="@HideRole">
+            @RoleComponent
+        </div>
+        <div hidden="@HideEvents">
+            <EventsComponent Parent="this" />
+        </div>
+        <div hidden="@HideStatus">
+            <GameStatusComponent Parent="this" />
+        </div>
+        <div hidden="@HideInfo">
+            <RoleInfoComponent Parent="this" />
+        </div>
+        @if (Timer > 0) {
+            <div class="alert-info">
+                <span class="oi oi-clock" aria-hidden="true"></span> @Timer
+            </div>
+        }
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public int GameId { get; set; }
+    [Parameter]
+    public int RoleSwitch { get; set; }
+
+    private string _username;
+    private EventsComponent eventsComponent;
+    private GameStatusComponent gameStatusComponent;
+    private RoleInfoComponent roleInfoComponent;
+
+    private Type ComponentType;
+    private RenderFragment RoleComponent;
+
+    private bool HideRole = false;
+    private bool HideEvents = true;
+    private bool HideStatus = true;
+    private bool HideInfo = true;
+    private bool collapseNavMenu = true;
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+
+    public int Timer { get; set; } = 0;
+
+    void StartCountdown() {
+        var timer = new Timer(new TimerCallback(_ => {
+            if (Timer <= 0) return;
+            Timer--;
+            InvokeAsync(() => { StateHasChanged(); });
+        }), null, 1000, 1000);
+    }
+
+
+    private void ToggleNavMenu() {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    override protected async Task OnInitializedAsync() {
+        RoleName rn = (RoleName)RoleSwitch;
+        StartCountdown();
+        switch (rn) {
+            case RoleName.Villager:
+                ComponentType = typeof(VillagerComponent);
+                break;
+
+            case RoleName.Seer:
+                ComponentType = typeof(SeerComponent);
+                break;
+
+            case RoleName.Werewolf:
+                ComponentType = typeof(WerewolfComponent);
+                break;
+
+            default: NavigationManager.NavigateTo(""); break;
+        }
+        _username = await ProtectedSessionStore.GetAsync<string>("name");
+
+        RoleComponent = builder => {
+            builder.OpenComponent(0, ComponentType);
+            builder.AddAttribute(1, "_playerName", _username);
+            builder.AddAttribute(2, "_gameId", GameId);
+            builder.AddAttribute(3, "Parent", this);
+            builder.CloseComponent();
+        };
+    }
+    private void HideAllExcept(ref bool excepted) {
+        HideRole = true;
+        HideEvents = true;
+        HideStatus = true;
+        HideInfo = true;
+        excepted = false;
+    }
+}

@@ -1,0 +1,37 @@
+﻿@page "/"
+@using WerewolfWebApp.Model
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject IDataService dataService
+@inject NavigationManager NavigationManager
+Welcome to your new app.
+<div></div>
+<button @onclick="Host">Host</button>
+
+<hr>
+
+@if (dataService.GameExists) {
+    <div>@game.Name</div>
+    <button @onclick="@Join">Join</button>
+}
+else {
+<div>
+    No game to join!
+</div>}
+
+@code {
+    GameManager game;
+    protected override async Task OnInitializedAsync() {
+        if (dataService.GameExists) {
+            game = dataService.Game;
+        }
+        await base.OnInitializedAsync();
+    }
+
+
+    void Join() {
+        NavigationManager.NavigateTo("/playgame");
+    }
+    void Host() {
+        NavigationManager.NavigateTo("/hostgame");
+    }
+}

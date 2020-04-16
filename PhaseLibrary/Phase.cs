@@ -3,48 +3,34 @@ using System.Threading;
 namespace PhaseLibrary {
 	public abstract class Phase {
 		private PhaseFactory PhFactory;
-		private Action<Phase> SetPhase;
-		private Timer phaseTimer;
-		private int Duration;
 		private bool IsSetup = false;
 
-		protected abstract int DefaultDuration { get; }
 
-		protected Phase(PhaseFactory factory, Action<Phase> setPhaseAction) {
+		protected Phase(PhaseFactory factory) {
 			PhFactory = factory;
-			SetPhase = setPhaseAction;
-			Duration = DefaultDuration;
 		}
 
-		public void StateHasChanged() {
+		public Phase StateHasChanged() {
 			if (!IsSetup) {
 				SetUp();
 			}
 			if (CanResolve()) {
-				phaseTimer.Dispose();
-				ResolveAndSetPhase();
+				Resolve();
+				return PhFactory.MakeNextPhase(this);
 			}
+			return this;
 		}
 		private void SetUp() {
-			TimerSetUp();
 			PhaseSetUp();
 			IsSetup = true;
 		}
-		private void TimerSetUp() {
-			if (Duration == 0) {
-				Duration = Timeout.Infinite;
-			}
-			phaseTimer = new Timer(ForceResolve, new AutoResetEvent(true), Duration, Timeout.Infinite);
-		}
 
-		private void ForceResolve(object state) {
-			phaseTimer.Dispose();
+		public void ForceResolve() {
 			PreForceResolve();
-			ResolveAndSetPhase();
+			Resolve();
 		}
-		private void ResolveAndSetPhase() {
+		private void Resolve() {
 			PhaseResolve();
-			SetPhase(PhFactory.MakeNextPhase(this, SetPhase));
 		}
 
 		protected abstract void PhaseSetUp();
