@@ -10,4 +10,8 @@
     <None Remove="WerewolfDomainTests\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Phases\" />
+  </ItemGroup>
+
 </Project>

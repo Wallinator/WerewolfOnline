@@ -7,24 +7,24 @@ using WerewolfDomain.Entities;
 namespace WerewolfDomain.Structures {
 	public class Poll<T> {
 
-		private List<Player> Voted = new List<Player>();
+		private HashSet<Player> Voted = new HashSet<Player>();
 		public Dictionary<T, int> Results = new Dictionary<T, int>();
-		public bool Closed { get; set; } = false;
+		public bool Closed { get; private set; } = false;
 		public List<Vote<T>> Votes = new List<Vote<T>>();
-		public List<Player> Voters;
+		public HashSet<Player> Voters;
 		public List<T> Choices;
 		public PollType Type;
 
-		public Poll(List<Player> voters, List<T> nominees, PollType type) {
-			Choices = nominees;
+		public Poll(IEnumerable<Player> voters, IEnumerable<T> nominees, PollType type) {
+			Choices = new List<T>(nominees);
 			Type = type;
-			Voters = voters;
+			Voters = new HashSet<Player>(voters);
 			foreach (T choice in Choices) {
 				Results[choice] = 0;
 			}
 		}
 		public bool Vote(Vote<T> vote) {
-			if (Closed || !Voters.Contains(vote.Voter)) {
+			if (Closed || !Voters.Contains(vote.Voter) || !Choices.Contains(vote.Choice)) {
 				return false;
 			}
 
@@ -50,7 +50,7 @@ namespace WerewolfDomain.Structures {
 		}
 
 		private void RemoveVote(Vote<T> vote) {
-			Votes.RemoveAll(x => x.Voter.Equals(vote.Voter));
+			Votes.RemoveAt(Votes.FindIndex(x => x.Voter.Equals(vote.Voter)));
 			--Results[vote.Choice];
 		}
 

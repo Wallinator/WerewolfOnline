@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WerewolfDomain.Play;
+using WerewolfDomain.Entities;
+using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Interfaces {
 	public interface Presentor {
-		void ShowPoll(List<Player> livingPlayers, Poll poll);
+		void ShowPoll(List<Player> livingPlayers, Poll<string> poll);
 	}
 }
