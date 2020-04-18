@@ -13,12 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\WerewolfDomain.csproj" />
+    <ProjectReference Include="..\Source\WerewolfDomain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="PhaseLibrary">
-      <HintPath>..\..\PhaseLibrary\src\bin\Release\netcoreapp3.1\PhaseLibrary.dll</HintPath>
+      <HintPath>..\..\PhaseLibrary\Source\bin\Release\netcoreapp3.1\PhaseLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
 

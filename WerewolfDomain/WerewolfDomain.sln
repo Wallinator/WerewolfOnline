@@ -8,9 +8,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WerewolfDomain", "src\WerewolfDomain.csproj", "{3C67A265-C2E1-46A3-B83D-4D81AEACB28A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WerewolfDomain", "Source\WerewolfDomain.csproj", "{FB78917B-6CF3-4294-9298-F8147F50931C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WerewolfDomainTests", "tests\WerewolfDomainTests.csproj", "{2245EFAA-9BC5-46BD-A294-C26C7120EB4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WerewolfDomainTests", "Testing\WerewolfDomainTests.csproj", "{E8F6BE5A-6E69-4E9F-9F21-20EED00D66FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,20 +18,17 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3C67A265-C2E1-46A3-B83D-4D81AEACB28A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C67A265-C2E1-46A3-B83D-4D81AEACB28A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C67A265-C2E1-46A3-B83D-4D81AEACB28A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C67A265-C2E1-46A3-B83D-4D81AEACB28A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2245EFAA-9BC5-46BD-A294-C26C7120EB4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2245EFAA-9BC5-46BD-A294-C26C7120EB4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2245EFAA-9BC5-46BD-A294-C26C7120EB4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2245EFAA-9BC5-46BD-A294-C26C7120EB4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB78917B-6CF3-4294-9298-F8147F50931C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB78917B-6CF3-4294-9298-F8147F50931C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB78917B-6CF3-4294-9298-F8147F50931C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB78917B-6CF3-4294-9298-F8147F50931C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8F6BE5A-6E69-4E9F-9F21-20EED00D66FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8F6BE5A-6E69-4E9F-9F21-20EED00D66FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8F6BE5A-6E69-4E9F-9F21-20EED00D66FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8F6BE5A-6E69-4E9F-9F21-20EED00D66FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{3C67A265-C2E1-46A3-B83D-4D81AEACB28A} = {8AC39496-3B71-4204-8658-943BA3097277}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D5732D56-F124-4288-A98E-DBE6B6912676}
