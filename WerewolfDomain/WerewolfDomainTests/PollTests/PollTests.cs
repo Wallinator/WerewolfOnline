@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using WerewolfDomain.Entities;
 using WerewolfDomain.Structures;
 
-namespace WerewolfDomainTests {
+namespace WerewolfDomainTests.PollTests {
 	public class PollTests {
 		private Poll<int> poll;
-		Player p1;
-		Player p2;
-		Player p3;
-		Player p4;
-		Player p5;
+		private Player p1;
+		private Player p2;
+		private Player p3;
+		private Player p4;
+		private Player p5;
 
 		[SetUp]
 		public void Setup() {

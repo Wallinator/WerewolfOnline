@@ -16,4 +16,10 @@
     <ProjectReference Include="..\WerewolfDomain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="PhaseLibrary">
+      <HintPath>..\..\PhaseLibrary\src\bin\Release\netcoreapp3.1\PhaseLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

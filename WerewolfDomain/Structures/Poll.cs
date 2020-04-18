@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using WerewolfDomain.Entities;
 
 namespace WerewolfDomain.Structures {
 	public class Poll<T> {
 
-		private HashSet<Player> Voted = new HashSet<Player>();
+		private readonly HashSet<Player> Voted = new HashSet<Player>();
 		public Dictionary<T, int> Results = new Dictionary<T, int>();
 		public bool Closed { get; private set; } = false;
 		public List<Vote<T>> Votes = new List<Vote<T>>();

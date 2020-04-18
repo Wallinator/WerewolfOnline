@@ -11,7 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Phases\" />
+    <Reference Include="PhaseLibrary">
+      <HintPath>..\PhaseLibrary\src\bin\Release\netcoreapp3.1\PhaseLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
