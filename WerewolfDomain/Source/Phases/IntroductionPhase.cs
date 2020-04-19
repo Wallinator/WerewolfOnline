@@ -1,5 +1,4 @@
 ﻿using PhaseLibrary;
-using System;
 using System.Collections.Generic;
 using WerewolfDomain.Interfaces;
 using WerewolfDomain.Structures;
@@ -22,14 +21,10 @@ namespace WerewolfDomain.Phases {
 
 		protected override List<Poll> ConstructPolls() {
 			List<Entities.Player> players = persistor.GetLivingPlayers();
-			List<Poll> polls = new List<Poll>() { 
+			List<Poll> polls = new List<Poll>() {
 				new Poll(players, new List<string> { "Ready" }, PollType.Ready)
 			};
 			return polls;
-		}
-
-		protected override void ConcreteResolve() {
-			return;
 		}
 	}
 }

@@ -8,7 +8,6 @@ using WerewolfDomain.Structures;
 namespace WerewolfDomainTests.PhaseTests.Mocks {
 	internal class MockPersistor : Persistor {
 		public Poll PollAdded { get; set; } = null;
-
 		public void AddPoll(Poll poll) {
 			PollAdded = poll;
 		}
@@ -33,8 +32,12 @@ namespace WerewolfDomainTests.PhaseTests.Mocks {
 		}
 
 		public PollType? PollTypeRemoved { get; set; } = null;
+
 		public void RemovePoll(PollType type) {
 			PollTypeRemoved = type;
 		}
+
+		public List<Player> Werewolves { get; set; } = null;
+		public List<Player> Villagers { get; set; } = null;
 	}
 }

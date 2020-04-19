@@ -18,12 +18,12 @@ namespace WerewolfDomainTests.PhaseTests {
 			mockPersistor = new MockPersistor();
 			mockPresentor = new MockPresentor();
 			phase = new PhaseFactoryImpl(mockPersistor, mockPresentor).MakeFirstPhase();
-			mockPersistor.PollToBeGot = new Poll(new List<Player>(), new string[] { }, PollType.Ready);
 			mockPersistor.LivingPlayers = new List<Player>() {
 				new Player("1", "abby"),
 				new Player("2", "bob"),
 				new Player("3", "claire"),
 			};
+			mockPersistor.PollToBeGot = new Poll(mockPersistor.LivingPlayers, new string[] { }, PollType.Ready);
 		}
 
 		[Test]

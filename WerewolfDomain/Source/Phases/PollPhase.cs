@@ -1,7 +1,5 @@
 ﻿using PhaseLibrary;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using WerewolfDomain.Interfaces;
 using WerewolfDomain.Structures;
 
@@ -16,7 +14,7 @@ namespace WerewolfDomain.Phases {
 		}
 
 		protected override void ConcreteResolve() {
-			GetPolls().ForEach(poll => Resolver.ResolvePoll(poll, persistor, presentor));
+			GetPolls().ForEach(poll => PollResolver.Resolve(poll, persistor, presentor));
 		}
 
 		protected override void PhaseSetUp() {

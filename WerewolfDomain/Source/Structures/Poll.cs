@@ -5,7 +5,7 @@ using WerewolfDomain.Entities;
 
 namespace WerewolfDomain.Structures {
 	public class Poll {
-		
+
 		private readonly HashSet<Player> Voted = new HashSet<Player>();
 		public Dictionary<object, int> Results = new Dictionary<object, int>();
 		public bool Closed { get; private set; } = false;
