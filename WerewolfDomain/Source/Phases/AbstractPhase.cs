@@ -8,7 +8,6 @@ namespace WerewolfDomain.Phases {
 		protected readonly Persistor persistor;
 		protected readonly Presentor presentor;
 		internal abstract PhaseType PhaseType { get; }
-		public abstract int DefaultDurationSeconds { get; }
 
 
 		protected AbstractPhase(PhaseFactory factory, Persistor persistor, Presentor presentor) : base(factory) {

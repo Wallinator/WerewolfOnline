@@ -4,6 +4,7 @@ namespace PhaseLibrary {
 	public abstract class Phase {
 		private PhaseFactory PhFactory;
 		private bool IsSetup = false;
+		public abstract int DefaultDurationSeconds { get; }
 
 
 		protected Phase(PhaseFactory factory) {
