@@ -18,7 +18,7 @@ namespace WerewolfDomainTests.PhaseTests {
 			mockPersistor = new MockPersistor();
 			mockPresentor = new MockPresentor();
 			phase = new PhaseFactoryImpl(mockPersistor, mockPresentor).MakeFirstPhase();
-			mockPersistor.PollToBeGot = new Poll<string>(new List<Player>(), new string[] { }, PollType.Ready);
+			mockPersistor.PollToBeGot = new Poll(new List<Player>(), new string[] { }, PollType.Ready);
 			mockPersistor.LivingPlayers = new List<Player>() {
 				new Player("1", "abby"),
 				new Player("2", "bob"),
@@ -30,7 +30,7 @@ namespace WerewolfDomainTests.PhaseTests {
 		public void IntroductionPhaseShouldAddPollOnSetup() {
 
 			phase.StateHasChanged();
-			Poll<string> poll = mockPersistor.PollAdded;
+			Poll poll = mockPersistor.PollAdded;
 			Assert.AreEqual(PollType.Ready, poll.Type);
 			Assert.IsTrue(poll.Voters.SetEquals(mockPersistor.LivingPlayers));
 

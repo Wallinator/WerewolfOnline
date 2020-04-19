@@ -5,34 +5,31 @@ using WerewolfDomain.Interfaces;
 using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Phases {
-	internal class IntroductionPhase : AbstractPhase {
+	internal class IntroductionPhase : PollPhase {
 		public IntroductionPhase(PhaseFactory factory, Persistor persistor, Presentor presentor) : base(factory, persistor, presentor) {
 		}
 
 		public override int DefaultDurationSeconds => 0;
 
+		protected override List<Poll> GetPolls() {
+			List<Poll> polls = new List<Poll> {
+				persistor.GetPoll(PollType.Ready)
+			};
+			return polls;
+		}
+
 		internal override PhaseType PhaseType => PhaseType.Introduction;
 
-		protected override bool CanResolve() {
-			Poll<string> poll = persistor.GetPoll(PollType.Ready);
-			return poll.Closed;
+		protected override List<Poll> ConstructPolls() {
+			List<Entities.Player> players = persistor.GetLivingPlayers();
+			List<Poll> polls = new List<Poll>() { 
+				new Poll(players, new List<string> { "Ready" }, PollType.Ready)
+			};
+			return polls;
 		}
 
 		protected override void ConcreteResolve() {
-			persistor.RemovePoll(PollType.Ready);
-			Poll<string> poll = persistor.GetPoll(PollType.Ready);
-			presentor.HidePoll(poll);
-		}
-
-		protected override void PhaseSetUp() {
-			var players = persistor.GetLivingPlayers();
-			Poll<string> poll = new Poll<string>(players, new List<string> { "Ready" }, PollType.Ready);
-			persistor.AddPoll(poll);
-			presentor.ShowPoll(poll);
-		}
-
-		protected override void PreForceResolve() {
-			throw new NotImplementedException();
+			return;
 		}
 	}
 }

@@ -1,33 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using WerewolfDomain.Entities;
 
 namespace WerewolfDomain.Structures {
-	public class Poll<T> {
-
+	public class Poll {
+		
 		private readonly HashSet<Player> Voted = new HashSet<Player>();
-		public Dictionary<T, int> Results = new Dictionary<T, int>();
+		public Dictionary<object, int> Results = new Dictionary<object, int>();
 		public bool Closed { get; private set; } = false;
-		public List<Vote<T>> Votes = new List<Vote<T>>();
+		public List<Vote> Votes = new List<Vote>();
 		public HashSet<Player> Voters;
-		public List<T> Choices;
+		public List<object> Choices;
 		public PollType Type;
 
-		public Poll(IEnumerable<Player> voters, IEnumerable<T> nominees, PollType type) {
-			Choices = new List<T>(nominees);
+		public Poll(IEnumerable<Player> voters, IEnumerable nominees, PollType type) {
+			Choices = new List<object>(nominees.Cast<object>());
 			Type = type;
 			Voters = new HashSet<Player>(voters);
-			foreach (T choice in Choices) {
+			foreach (object choice in Choices) {
 				Results[choice] = 0;
 			}
 		}
-		public bool Vote(Vote<T> vote) {
+		public bool Vote(Vote vote) {
 			if (Closed || !Voters.Contains(vote.Voter) || !Choices.Contains(vote.Choice)) {
 				return false;
 			}
 
 			if (Voted.Contains(vote.Voter)) {
 
-				Vote<T> PreviousVote = Votes.Find(x => x.Voter.Equals(vote.Voter));
+				Vote PreviousVote = Votes.Find(x => x.Voter.Equals(vote.Voter));
 				if (PreviousVote.Equals(vote)) {
 					return true;
 				}
@@ -48,12 +50,12 @@ namespace WerewolfDomain.Structures {
 			return true;
 		}
 
-		private void RemoveVote(Vote<T> vote) {
+		private void RemoveVote(Vote vote) {
 			Votes.Remove(vote);
 			--Results[vote.Choice];
 		}
 
-		private void AddVote(Vote<T> vote) {
+		private void AddVote(Vote vote) {
 			Votes.Add(vote);
 			++Results[vote.Choice];
 		}

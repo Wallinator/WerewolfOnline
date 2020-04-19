@@ -7,9 +7,9 @@ using WerewolfDomain.Structures;
 
 namespace WerewolfDomainTests.PhaseTests.Mocks {
 	internal class MockPersistor : Persistor {
-		public Poll<string> PollAdded { get; set; } = null;
+		public Poll PollAdded { get; set; } = null;
 
-		public void AddPoll(Poll<string> poll) {
+		public void AddPoll(Poll poll) {
 			PollAdded = poll;
 		}
 
@@ -23,8 +23,8 @@ namespace WerewolfDomainTests.PhaseTests.Mocks {
 			throw new NotImplementedException();
 		}
 
-		public Poll<string> PollToBeGot { get; set; } = null;
-		public Poll<string> GetPoll(PollType type) {
+		public Poll PollToBeGot { get; set; } = null;
+		public Poll GetPoll(PollType type) {
 			return PollToBeGot;
 		}
 

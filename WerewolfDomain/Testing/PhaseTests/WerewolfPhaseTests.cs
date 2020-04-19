@@ -18,22 +18,12 @@ namespace WerewolfDomainTests.PhaseTests {
 			mockPersistor = new MockPersistor();
 			mockPresentor = new MockPresentor();
 			phase = new PhaseFactoryImpl(mockPersistor, mockPresentor).MakeFirstPhase();
-			mockPersistor.PollToBeGot = new Poll<string>(new List<Player>(), new string[] { }, PollType.Ready);
+			mockPersistor.PollToBeGot = new Poll(new List<Player>(), new string[] { }, PollType.Ready);
 		}
 
 		[Test]
 		public void IntroductionPhaseShouldAddPollOnSetup() {
-		}
-		[Test]
-		public void IntroductionPhaseShouldNotResolve() {
-			Phase newPhase = phase.StateHasChanged();
-			Assert.AreSame(phase, newPhase);
-		}
-		[Test]
-		public void IntroductionPhaseShouldResolve() {
-			mockPersistor.PollToBeGot.ClosePoll();
-			Phase newPhase = phase.StateHasChanged();
-			Assert.AreNotSame(phase, newPhase);
+			Assert.Fail();
 		}
 	}
 }

@@ -6,8 +6,8 @@ using WerewolfDomain.Structures;
 namespace WerewolfDomain.Interfaces {
 	public interface Persistor {
 		List<Player> GetLivingPlayers();
-		void AddPoll(Poll<string> poll);
-		Poll<string> GetPoll(PollType type);
+		void AddPoll(Poll poll);
+		Poll GetPoll(PollType type);
 		Phase GetNextPhase();
 		bool NextPhaseExists();
 		void RemovePoll(PollType type);

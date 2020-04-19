@@ -7,24 +7,29 @@ using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Phases {
 	internal abstract class PollPhase : AbstractPhase {
-		protected abstract List<Poll<object>> Polls { get; }
+		protected abstract List<Poll> GetPolls();
 		protected PollPhase(PhaseFactory factory, Persistor persistor, Presentor presentor) : base(factory, persistor, presentor) {
 		}
 
 		protected override bool CanResolve() {
-			return false;
+			return GetPolls().TrueForAll(poll => poll.Closed);
 		}
 
 		protected override void ConcreteResolve() {
-			throw new NotImplementedException();
+			GetPolls().ForEach(poll => Resolver.ResolvePoll(poll, persistor, presentor));
 		}
 
 		protected override void PhaseSetUp() {
-			throw new NotImplementedException();
+			ConstructPolls().ForEach(poll => {
+				persistor.AddPoll(poll);
+				presentor.ShowPoll(poll);
+			});
 		}
 
+		protected abstract List<Poll> ConstructPolls();
+
 		protected override void PreForceResolve() {
-			throw new NotImplementedException();
+			GetPolls().ForEach(poll => poll.ClosePoll());
 		}
 	}
 }

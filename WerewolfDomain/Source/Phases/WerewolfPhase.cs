@@ -1,9 +1,11 @@
 ﻿using PhaseLibrary;
 using System;
+using System.Collections.Generic;
 using WerewolfDomain.Interfaces;
+using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Phases {
-	internal class WerewolfPhase : AbstractPhase {
+	internal class WerewolfPhase : PollPhase {
 		public WerewolfPhase(PhaseFactory factory, Persistor persistor, Presentor presentor) : base(factory, persistor, presentor) {
 		}
 
@@ -11,19 +13,11 @@ namespace WerewolfDomain.Phases {
 
 		internal override PhaseType PhaseType => PhaseType.Werewolf;
 
-		protected override bool CanResolve() {
+		protected override List<Poll> ConstructPolls() {
 			throw new NotImplementedException();
 		}
 
-		protected override void ConcreteResolve() {
-			throw new NotImplementedException();
-		}
-
-		protected override void PhaseSetUp() {
-			throw new NotImplementedException();
-		}
-
-		protected override void PreForceResolve() {
+		protected override List<Poll> GetPolls() {
 			throw new NotImplementedException();
 		}
 	}
