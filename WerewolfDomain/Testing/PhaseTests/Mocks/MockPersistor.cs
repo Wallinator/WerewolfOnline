@@ -5,23 +5,25 @@ using WerewolfDomain.Entities;
 using WerewolfDomain.Interfaces;
 using WerewolfDomain.Structures;
 
-namespace WerewolfDomainTests.IntroductionPhaseTests.Mocks {
-	internal class IntroductionPhaseMockPersistor : Persistor {
-		public bool AddPollCalled { get; internal set; }
+namespace WerewolfDomainTests.PhaseTests.Mocks {
+	internal class MockPersistor : Persistor {
+		public Poll<string> PollAdded { get; set; } = null;
 
 		public void AddPoll(Poll<string> poll) {
-			AddPollCalled = true;
+			PollAdded = poll;
 		}
 
+		public List<Player> LivingPlayers { get; set; } = null;
 		public List<Player> GetLivingPlayers() {
-			return new List<Player>();
+			return LivingPlayers;
 		}
+
 
 		public Phase GetNextPhase() {
 			throw new NotImplementedException();
 		}
 
-		public Poll<string> PollToBeGot { get; set; }
+		public Poll<string> PollToBeGot { get; set; } = null;
 		public Poll<string> GetPoll(PollType type) {
 			return PollToBeGot;
 		}
@@ -30,9 +32,9 @@ namespace WerewolfDomainTests.IntroductionPhaseTests.Mocks {
 			return false;
 		}
 
-		public bool RemovePollCalled { get; internal set; }
+		public PollType? PollTypeRemoved { get; set; } = null;
 		public void RemovePoll(PollType type) {
-			RemovePollCalled = true;
+			PollTypeRemoved = type;
 		}
 	}
 }

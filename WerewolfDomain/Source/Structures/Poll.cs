@@ -26,7 +26,14 @@ namespace WerewolfDomain.Structures {
 			}
 
 			if (Voted.Contains(vote.Voter)) {
-				RemoveVote(vote);
+
+				Vote<T> PreviousVote = Votes.Find(x => x.Voter.Equals(vote.Voter));
+				if (PreviousVote.Equals(vote)) {
+					return true;
+				}
+				else {
+					RemoveVote(PreviousVote);
+				}
 			}
 			else {
 				Voted.Add(vote.Voter);
@@ -41,15 +48,17 @@ namespace WerewolfDomain.Structures {
 			return true;
 		}
 
+		private void RemoveVote(Vote<T> vote) {
+			Votes.Remove(vote);
+			--Results[vote.Choice];
+		}
+
 		private void AddVote(Vote<T> vote) {
 			Votes.Add(vote);
 			++Results[vote.Choice];
 		}
 
-		private void RemoveVote(Vote<T> vote) {
-			Votes.RemoveAt(Votes.FindIndex(x => x.Voter.Equals(vote.Voter)));
-			--Results[vote.Choice];
-		}
+
 
 		public void ClosePoll() {
 			Closed = true;

@@ -4,28 +4,25 @@ using System.Collections.Generic;
 using WerewolfDomain.Entities;
 using WerewolfDomain.Phases;
 using WerewolfDomain.Structures;
-using WerewolfDomainTests.IntroductionPhaseTests.Mocks;
+using WerewolfDomainTests.PhaseTests.Mocks;
 
-namespace WerewolfDomainTests.IntroductionPhaseTests {
-	public class IntroductionPhaseTests {
+namespace WerewolfDomainTests.PhaseTests {
+	public class WerewolfPhaseTests {
 
 		private Phase phase;
-		private IntroductionPhaseMockPersistor mockPersistor;
-		private IntroductionPhaseMockPresentor mockPresentor;
+		private MockPersistor mockPersistor;
+		private MockPresentor mockPresentor;
 
 		[SetUp]
 		public void Setup() {
-			mockPersistor = new IntroductionPhaseMockPersistor();
-			mockPresentor = new IntroductionPhaseMockPresentor();
+			mockPersistor = new MockPersistor();
+			mockPresentor = new MockPresentor();
 			phase = new PhaseFactoryImpl(mockPersistor, mockPresentor).MakeFirstPhase();
 			mockPersistor.PollToBeGot = new Poll<string>(new List<Player>(), new string[] { }, PollType.Ready);
 		}
 
 		[Test]
 		public void IntroductionPhaseShouldAddPollOnSetup() {
-			phase.StateHasChanged();
-			Assert.IsTrue(mockPersistor.AddPollCalled);
-			Assert.IsTrue(mockPresentor.ShowPollCalled);
 		}
 		[Test]
 		public void IntroductionPhaseShouldNotResolve() {
