@@ -15,7 +15,7 @@ namespace WerewolfDomain.Phases {
 			return new IntroductionPhase(this, persistor, presentor);
 		}
 
-		protected override Phase MakeNextPhase(Phase phase) {
+		public override Phase MakeNextPhase(Phase phase) {
 			if (persistor.NextPhaseExists()) {
 				return persistor.GetNextPhase();
 			}

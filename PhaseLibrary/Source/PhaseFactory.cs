@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PhaseLibrary {
 	public abstract class PhaseFactory {
-		protected internal abstract Phase MakeNextPhase(Phase phase);
+		public abstract Phase MakeNextPhase(Phase phase);
 		public abstract Phase MakeFirstPhase();
 	}
 }

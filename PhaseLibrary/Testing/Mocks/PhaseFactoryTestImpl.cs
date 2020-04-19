@@ -8,7 +8,7 @@ namespace PhaseTests.Mocks {
 			throw new NotImplementedException();
 		}
 
-		protected override Phase MakeNextPhase(Phase phase) {
+		public override Phase MakeNextPhase(Phase phase) {
 			return new PhaseTestImpl(this, ((PhaseTestImpl) phase).Id + 1, true);
 		}
 	}
