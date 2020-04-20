@@ -1,6 +1,7 @@
 ﻿using PhaseLibrary;
 using System;
 using WerewolfDomain.Interfaces;
+using WerewolfDomain.Phases.Shared;
 
 namespace WerewolfDomain.Phases {
 	internal class StoryPhase : AbstractPhase {

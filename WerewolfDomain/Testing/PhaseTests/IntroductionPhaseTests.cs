@@ -2,7 +2,7 @@ using NUnit.Framework;
 using PhaseLibrary;
 using System.Collections.Generic;
 using WerewolfDomain.Entities;
-using WerewolfDomain.Phases;
+using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Structures;
 using WerewolfDomainTests.PhaseTests.Mocks;
 
@@ -17,7 +17,7 @@ namespace WerewolfDomainTests.PhaseTests {
 		public void Setup() {
 			mockPersistor = new MockPersistor();
 			mockPresentor = new MockPresentor();
-			phase = new PhaseFactoryImpl(mockPersistor, mockPresentor).MakeFirstPhase();
+			phase = new PhaseFactoryImpl(mockPersistor, mockPresentor, mockPersistor.AllPhasesExist()).MakeFirstPhase();
 			mockPersistor.LivingPlayers = new List<Player>() {
 				new Player("1", "abby"),
 				new Player("2", "bob"),
@@ -41,10 +41,17 @@ namespace WerewolfDomainTests.PhaseTests {
 			Assert.AreSame(phase, newPhase);
 		}
 		[Test]
-		public void IntroductionPhaseShouldResolve() {
+		public void IntroductionPhaseShouldResolveWhenPollCLosed() {
 			mockPersistor.PollToBeGot.ClosePoll();
 			Phase newPhase = phase.StateHasChanged();
 			Assert.AreNotSame(phase, newPhase);
+		}
+		[Test]
+		public void IntroductionPhaseShouldRemovePollWhenResolved() {
+			mockPersistor.PollToBeGot.ClosePoll();
+			Phase newPhase = phase.StateHasChanged();
+			Assert.AreEqual(PollType.Ready, mockPersistor.PollTypeRemoved);
+			Assert.AreEqual(mockPersistor.PollToBeGot, mockPresentor.PollHidden);
 		}
 	}
 }

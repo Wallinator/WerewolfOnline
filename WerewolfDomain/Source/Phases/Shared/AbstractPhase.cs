@@ -1,8 +1,8 @@
 ﻿using PhaseLibrary;
 using WerewolfDomain.Interfaces;
 
-namespace WerewolfDomain.Phases {
-	public abstract class AbstractPhase : Phase {
+namespace WerewolfDomain.Phases.Shared {
+	internal abstract class AbstractPhase : Phase {
 
 		protected readonly Persistor persistor;
 		protected readonly Presentor presentor;

@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using WerewolfDomain.Interfaces;
 using WerewolfDomain.Structures;
 
-namespace WerewolfDomain.Phases {
+namespace WerewolfDomain.Phases.Shared {
 	internal abstract class PollPhase : AbstractPhase {
-		protected abstract List<Poll> GetPolls();
+		protected abstract List<Poll> GetMyPolls();
 		protected PollPhase(PhaseFactory factory, Persistor persistor, Presentor presentor) : base(factory, persistor, presentor) {
 		}
 
 		protected override bool CanResolve() {
-			return GetPolls().TrueForAll(poll => poll.Closed);
+			return GetMyPolls().TrueForAll(poll => poll.Closed);
 		}
 
 		protected override void ConcreteResolve() {
-			GetPolls().ForEach(poll => PollResolver.Resolve(poll, persistor, presentor));
+			GetMyPolls().ForEach((poll) => {
+				PollResolver.Resolve(poll, persistor, presentor);
+			});
 		}
 
 		protected override void PhaseSetUp() {
@@ -27,7 +29,7 @@ namespace WerewolfDomain.Phases {
 		protected abstract List<Poll> ConstructPolls();
 
 		protected override void PreForceResolve() {
-			GetPolls().ForEach(poll => poll.ClosePoll());
+			GetMyPolls().ForEach(poll => poll.ClosePoll());
 		}
 	}
 }

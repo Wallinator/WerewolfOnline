@@ -1,6 +1,7 @@
 ﻿using PhaseLibrary;
 using System.Collections.Generic;
 using WerewolfDomain.Interfaces;
+using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Phases {
@@ -10,7 +11,7 @@ namespace WerewolfDomain.Phases {
 
 		public override int DefaultDurationSeconds => 0;
 
-		protected override List<Poll> GetPolls() {
+		protected override List<Poll> GetMyPolls() {
 			List<Poll> polls = new List<Poll> {
 				persistor.GetPoll(PollType.Ready)
 			};

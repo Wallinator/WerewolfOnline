@@ -3,8 +3,8 @@ using WerewolfDomain.Exceptions;
 using WerewolfDomain.Interfaces;
 using WerewolfDomain.Structures;
 
-namespace WerewolfDomain.Phases {
-	public static class PollResolver {
+namespace WerewolfDomain.Phases.Shared {
+	internal static class PollResolver {
 		public static void Resolve(Poll poll, Persistor persistor, Presentor presentor) {
 			switch (poll.Type) {
 				case PollType.Ready:
@@ -29,6 +29,7 @@ namespace WerewolfDomain.Phases {
 		private static void ResolveReady(Poll poll, Persistor persistor, Presentor presentor) {
 			persistor.RemovePoll(poll.Type);
 			presentor.HidePoll(poll);
+			return;
 		}
 		private static void ResolveWerewolf(Poll poll, Persistor persistor, Presentor presentor) {
 			throw new NotImplementedException();

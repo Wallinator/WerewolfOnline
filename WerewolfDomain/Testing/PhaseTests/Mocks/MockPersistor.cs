@@ -3,10 +3,12 @@ using System;
 using System.Collections.Generic;
 using WerewolfDomain.Entities;
 using WerewolfDomain.Interfaces;
+using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Structures;
 
 namespace WerewolfDomainTests.PhaseTests.Mocks {
 	internal class MockPersistor : Persistor {
+
 		public Poll PollAdded { get; set; } = null;
 		public void AddPoll(Poll poll) {
 			PollAdded = poll;
@@ -23,6 +25,15 @@ namespace WerewolfDomainTests.PhaseTests.Mocks {
 		}
 
 		public Poll PollToBeGot { get; set; } = null;
+
+		internal Dictionary<PhaseType, bool> AllPhasesExist() {
+			Dictionary<PhaseType, bool> dict = new Dictionary<PhaseType, bool>();
+			foreach (PhaseType type in Enum.GetValues(typeof(PhaseType))) {
+				dict[type] = true;
+			}
+			return dict;
+		}
+
 		public Poll GetPoll(PollType type) {
 			return PollToBeGot;
 		}
@@ -38,6 +49,14 @@ namespace WerewolfDomainTests.PhaseTests.Mocks {
 		}
 
 		public List<Player> Werewolves { get; set; } = null;
-		public List<Player> Villagers { get; set; } = null;
+		public List<Player> GetLivingWerewolves() {
+			return Werewolves;
+		}
+
+		public List<Player> NonWerewolves { get; set; } = null;
+		public List<Player> GetLivingNonWerewolves() {
+			return NonWerewolves;
+		}
+
 	}
 }
