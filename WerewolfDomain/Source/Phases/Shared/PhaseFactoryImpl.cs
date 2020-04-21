@@ -21,10 +21,18 @@ namespace WerewolfDomain.Phases.Shared {
 		}
 
 		public override Phase MakeNextPhase(Phase phase) {
-			if (persistor.NextPhaseExists()) {
-				return persistor.GetNextPhase();
-			}
 			AbstractPhase abstractPhase = (AbstractPhase)phase;
+			PhaseType currentPhaseType;
+			if (phase is InterruptingPhase) {
+				currentPhaseType = ((InterruptingPhase)phase).PhaseInterrupted;
+			}
+			else {
+				currentPhaseType = abstractPhase.PhaseType;
+			}
+
+			if (persistor.NextPhaseExists()) {
+				return persistor.GetNextPhase(currentPhaseType);
+			}
 			return NewPhase(abstractPhase.PhaseType + 1);
 		}
 
@@ -45,22 +53,23 @@ namespace WerewolfDomain.Phases.Shared {
 				PhaseType.Seer => new SeerPhase(this, persistor, presentor),
 				PhaseType.Story => new StoryPhase(this, persistor, presentor),
 				PhaseType.Discussion => new DiscussionPhase(this, persistor, presentor),
-				PhaseType.Vote => throw new NotImplementedException(),
-				PhaseType.VoteResults => throw new NotImplementedException(),
+				PhaseType.Jury => throw new NotImplementedException(),
+				PhaseType.Execution => throw new NotImplementedException(),
 				PhaseType.Wrapper => new WerewolfPhase(this, persistor, presentor),
 				_ => throw new InvalidPhaseTypeException(),
 			};
 		}
 	}
 	public enum PhaseType {
-		//phases should be in order of execution
+		//phases should be in order of resolution
 		Introduction,
 		Werewolf,
 		Seer,
 		Story,
 		Discussion,
-		Vote,
-		VoteResults,
+		Jury,
+		Execution,
+		//wrapper must be on button
 		Wrapper
 	}
 }

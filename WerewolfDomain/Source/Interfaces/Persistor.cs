@@ -11,5 +11,6 @@ namespace WerewolfDomain.Interfaces {
 		Phase GetNextPhase();
 		bool NextPhaseExists();
 		void RemovePoll(PollType type);
+		void SetNextPhase(Phase phase);
 	}
 }
