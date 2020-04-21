@@ -1,7 +1,9 @@
 ﻿using PhaseLibrary;
 using System.Collections.Generic;
+using WerewolfDomain.Entities;
 using WerewolfDomain.Interfaces;
 using WerewolfDomain.Phases.Shared;
+using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Phases {
@@ -14,11 +16,21 @@ namespace WerewolfDomain.Phases {
 		internal override PhaseType PhaseType => PhaseType.Seer;
 
 		protected override List<Poll> ConstructPolls() {
-			throw new System.NotImplementedException();
+			List<Poll> polls = new List<Poll>();
+			List<Player> livingPlayers = persistor.GetLivingPlayers();
+			Poll poll = new Poll(
+				livingPlayers.FindAll(x => x.Role.Name == RoleName.Seer),
+				livingPlayers.FindAll(x => x.Role.Name != RoleName.Seer).ConvertAll(player => player.Name),
+				PollType.Seer);
+			polls.Add(poll);
+			return polls;
 		}
 
-		protected override List<Poll> GetMyPolls() {
-			throw new System.NotImplementedException();
+		protected override List<PollType> PollTypes() {
+			List<PollType> polltypes = new List<PollType> {
+				PollType.Seer
+			};
+			return polltypes;
 		}
 	}
 }

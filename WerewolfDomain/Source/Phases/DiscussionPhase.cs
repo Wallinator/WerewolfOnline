@@ -17,7 +17,7 @@ namespace WerewolfDomain.Phases {
 			throw new System.NotImplementedException();
 		}
 
-		protected override List<Poll> GetMyPolls() {
+		protected override List<PollType> PollTypes() {
 			throw new System.NotImplementedException();
 		}
 	}

@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq;
 using WerewolfDomain.Entities;
 using WerewolfDomain.Structures;
 
@@ -26,55 +27,77 @@ namespace WerewolfDomainTests.PollTests {
 
 		[Test]
 		public void PollShouldCountVote() {
-			bool result = poll.Vote(new Vote(p1, 1));
+			bool result = poll.PlaceVote(p1, 1);
 			Assert.IsTrue(result);
 			Assert.AreEqual(1, poll.Votes.Count);
 		}
 		[Test]
 		public void PollShouldNotCountVoteWhenClosed() {
 			poll.ClosePoll();
-			bool result = poll.Vote(new Vote(p1, 1));
+			bool result = poll.PlaceVote(p1, 1);
 			Assert.IsFalse(result);
 		}
 		[Test]
 		public void PollShouldNotCountVoteWhenVoterNotInPollList() {
 			var fakePlayer = new Player("33", "name");
-			bool result = poll.Vote(new Vote(fakePlayer, 1));
+			bool result = poll.PlaceVote(fakePlayer, 1);
 			Assert.IsFalse(result);
 		}
 		[Test]
 		public void PollShouldNotCountVoteWhenChoiceNotInPollList() {
-			bool result = poll.Vote(new Vote(p1, 9));
+			bool result = poll.PlaceVote(p1, 9);
 			Assert.IsFalse(result);
 		}
 		[Test]
 		public void PollShouldChangeVoteWhenPlayerAlreadyVoted() {
 			int firstChoice = 5;
 			int secondChoice = 4;
-			poll.Vote(new Vote(p1, firstChoice));
-			poll.Vote(new Vote(p1, secondChoice));
+			poll.PlaceVote(p1, firstChoice);
+			poll.PlaceVote(p1, secondChoice);
 			Assert.AreEqual(1, poll.Votes.Count);
-			Assert.AreEqual(secondChoice, poll.Votes.Find(x => x.Voter.Equals(p1)).Choice);
+			Assert.AreEqual(secondChoice, poll.Votes[p1]);
 		}
 		[Test]
 		public void PollShouldCloseWhenAllVotesReceived() {
-			poll.Vote(new Vote(p1, 1));
-			poll.Vote(new Vote(p2, 1));
-			poll.Vote(new Vote(p3, 1));
-			poll.Vote(new Vote(p4, 1));
-			poll.Vote(new Vote(p5, 1));
+			poll.PlaceVote(p1, 1);
+			poll.PlaceVote(p2, 1);
+			poll.PlaceVote(p3, 1);
+			poll.PlaceVote(p4, 1);
+			poll.PlaceVote(p5, 1);
 			Assert.IsTrue(poll.Closed);
 		}
 		[Test]
-		public void PollShouldReportVotes() {
-			poll.Vote(new Vote(p1, 1));
-			poll.Vote(new Vote(p2, 1));
-			poll.Vote(new Vote(p3, 2));
-			poll.Vote(new Vote(p4, 2));
-			poll.Vote(new Vote(p5, 1));
+		public void PollResultsShouldReportVotes() {
+			poll.PlaceVote(p1, 1);
+			poll.PlaceVote(p2, 1);
+			poll.PlaceVote(p3, 2);
+			poll.PlaceVote(p4, 2);
+			poll.PlaceVote(p5, 1);
 			Assert.AreEqual(3, poll.Results[1]);
 			Assert.AreEqual(2, poll.Results[2]);
 			Assert.AreEqual(0, poll.Results[3]);
+		}
+		[Test]
+		public void PollShouldReportWinnersWhenOneWinner() {
+			poll.PlaceVote(p1, 1);
+			poll.PlaceVote(p2, 1);
+			poll.PlaceVote(p3, 2);
+			poll.PlaceVote(p4, 2);
+			poll.PlaceVote(p5, 1);
+			Assert.AreEqual(1, (int)poll.Winners().First());
+		}
+		[Test]
+		public void PollShouldReportWinnersWhenMultipleWinners() {
+			poll.PlaceVote(p1, 1);
+			poll.PlaceVote(p2, 1);
+			poll.PlaceVote(p3, 2);
+			poll.PlaceVote(p4, 2);
+			poll.PlaceVote(p5, 3);
+			List<int> actual = poll.Winners().ConvertAll(x => (int)x);
+			List<int> expected = new List<int>() { 1, 2 };
+			actual.Sort();
+			expected.Sort();
+			Assert.IsTrue(actual.SequenceEqual(expected));
 		}
 	}
 }

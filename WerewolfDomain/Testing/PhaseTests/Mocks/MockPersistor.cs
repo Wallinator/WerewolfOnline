@@ -48,15 +48,5 @@ namespace WerewolfDomainTests.PhaseTests.Mocks {
 			PollTypeRemoved = type;
 		}
 
-		public List<Player> Werewolves { get; set; } = null;
-		public List<Player> GetLivingWerewolves() {
-			return Werewolves;
-		}
-
-		public List<Player> NonWerewolves { get; set; } = null;
-		public List<Player> GetLivingNonWerewolves() {
-			return NonWerewolves;
-		}
-
 	}
 }

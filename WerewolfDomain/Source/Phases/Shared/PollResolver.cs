@@ -1,4 +1,5 @@
 ﻿using System;
+using WerewolfDomain.Entities;
 using WerewolfDomain.Exceptions;
 using WerewolfDomain.Interfaces;
 using WerewolfDomain.Structures;
@@ -40,7 +41,14 @@ namespace WerewolfDomain.Phases.Shared {
 		}
 
 		private static void ResolveSeer(Poll poll, Persistor persistor, Presentor presentor) {
-			throw new NotImplementedException();
+			foreach (Player seer in poll.Voters) {
+				object choice;
+				if (poll.Votes.TryGetValue(seer, out choice)) {
+					presentor.ShowSeerPlayerRole(seer, (string)choice);
+				}
+			}
+			persistor.RemovePoll(poll.Type);
+			presentor.HidePoll(poll);
 		}
 
 		private static void ResolveSleep(Poll poll, Persistor persistor, Presentor presentor) {

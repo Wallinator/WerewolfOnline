@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WerewolfDomain.Entities;
 using WerewolfDomain.Phases.Shared;
+using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
 using WerewolfDomainTests.PhaseTests.Mocks;
 
@@ -14,6 +15,9 @@ namespace WerewolfDomainTests.PhaseTests {
 		private Phase phase;
 		private MockPersistor mockPersistor;
 		private MockPresentor mockPresentor;
+		private readonly Player seer = new Player("1", "abby");
+		private readonly Player werewolf = new Player("2", "bob");
+		private readonly Player villager = new Player("3", "claire");
 
 		[SetUp]
 		public void Setup() {
@@ -22,19 +26,15 @@ namespace WerewolfDomainTests.PhaseTests {
 			PhaseFactoryImpl factory = new PhaseFactoryImpl(mockPersistor, mockPresentor, mockPersistor.AllPhasesExist());
 			phase = factory.MakeFirstPhase();
 			phase = factory.MakeNextPhase(phase);
-			mockPersistor.PollToBeGot = new Poll(new List<Player>(), new string[] { }, PollType.Werewolf);
+			seer.Role = new Seer();
+			werewolf.Role = new Werewolf();
+			villager.Role = new Villager();
 			mockPersistor.LivingPlayers = new List<Player>() {
-				new Player("1", "abby"),
-				new Player("2", "bob"),
-				new Player("3", "claire"),
+				seer,
+				werewolf,
+				villager,
 			};
-			mockPersistor.NonWerewolves = new List<Player>() {
-				new Player("1", "abby"),
-				new Player("2", "bob"),
-			};
-			mockPersistor.Werewolves = new List<Player>() {
-				new Player("3", "claire")
-			};
+			mockPersistor.PollToBeGot = new Poll(new Player[0], new string[] { }, PollType.Werewolf);
 		}
 
 		[Test]
@@ -43,10 +43,10 @@ namespace WerewolfDomainTests.PhaseTests {
 			phase.StateHasChanged();
 			Poll poll = mockPersistor.PollAdded;
 			Assert.AreEqual(PollType.Werewolf, poll.Type);
-			Assert.IsTrue(poll.Voters.SetEquals(mockPersistor.Werewolves));
+			Assert.IsTrue(poll.Voters.SetEquals(mockPersistor.LivingPlayers.FindAll(player => player.Role.Name == RoleName.Werewolf)));
 			List<string> choicesactual = poll.Choices.ConvertAll(obj => (string)obj);
 			choicesactual.Sort();
-			List<string> choicesexpected = mockPersistor.NonWerewolves.ConvertAll(player => player.Name);
+			List<string> choicesexpected = mockPersistor.LivingPlayers.FindAll(player => player.Role.Name != RoleName.Werewolf).ConvertAll(player => player.Name);
 			choicesexpected.Sort();
 			Assert.IsTrue(choicesactual.SequenceEqual(choicesexpected));
 		}

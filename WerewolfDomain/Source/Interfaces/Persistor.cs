@@ -11,7 +11,5 @@ namespace WerewolfDomain.Interfaces {
 		Phase GetNextPhase();
 		bool NextPhaseExists();
 		void RemovePoll(PollType type);
-		List<Player> GetLivingWerewolves();
-		List<Player> GetLivingNonWerewolves();
 	}
 }

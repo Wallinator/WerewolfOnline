@@ -1,4 +1,5 @@
-﻿using WerewolfDomain.Interfaces;
+﻿using WerewolfDomain.Entities;
+using WerewolfDomain.Interfaces;
 using WerewolfDomain.Structures;
 
 namespace WerewolfDomainTests.PhaseTests.Mocks {
@@ -13,6 +14,13 @@ namespace WerewolfDomainTests.PhaseTests.Mocks {
 		public Poll PollShown { get; set; } = null;
 		public void ShowPoll(Poll poll) {
 			PollShown = poll;
+		}
+
+		public Player SeerShownRole { get; set; } = null;
+		public string NameOfPlayerShownToSeer { get; set; } = null;
+		public void ShowSeerPlayerRole(Player seer, string playerName) {
+			SeerShownRole = seer;
+			NameOfPlayerShownToSeer = playerName;
 		}
 	}
 }

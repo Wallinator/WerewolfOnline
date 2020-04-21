@@ -11,12 +11,6 @@ namespace WerewolfDomain.Phases {
 
 		public override int DefaultDurationSeconds => 0;
 
-		protected override List<Poll> GetMyPolls() {
-			List<Poll> polls = new List<Poll> {
-				persistor.GetPoll(PollType.Ready)
-			};
-			return polls;
-		}
 
 		internal override PhaseType PhaseType => PhaseType.Introduction;
 
@@ -26,6 +20,13 @@ namespace WerewolfDomain.Phases {
 				new Poll(players, new List<string> { "Ready" }, PollType.Ready)
 			};
 			return polls;
+		}
+
+		protected override List<PollType> PollTypes() {
+			List<PollType> polltypes = new List<PollType> {
+				PollType.Ready
+			};
+			return polltypes;
 		}
 	}
 }
