@@ -24,7 +24,6 @@ namespace WerewolfDomainTests.PhaseTests.Mocks {
 			throw new NotImplementedException();
 		}
 
-		public Poll PollToBeGot { get; set; } = null;
 
 		internal Dictionary<PhaseType, bool> AllPhasesExist() {
 			Dictionary<PhaseType, bool> dict = new Dictionary<PhaseType, bool>();
@@ -34,6 +33,7 @@ namespace WerewolfDomainTests.PhaseTests.Mocks {
 			return dict;
 		}
 
+		public Poll PollToBeGot { get; set; } = null;
 		public Poll GetPoll(PollType type) {
 			return PollToBeGot;
 		}

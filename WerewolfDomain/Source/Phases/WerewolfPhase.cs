@@ -34,6 +34,8 @@ namespace WerewolfDomain.Phases {
 		}
 
 		protected override void ConcreteResolve() {
+			Poll poll = persistor.GetPoll(PollType.Werewolf);
+			presentor.HidePoll(poll);
 			return;
 		}
 	}
