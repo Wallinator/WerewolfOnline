@@ -1,9 +1,10 @@
-﻿using System;
+﻿using PhaseLibrary;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace WerewolfDomain.Phases.Shared {
-	internal interface InterruptingPhase {
+	public interface InterruptingPhase {
 		PhaseType PhaseInterrupted { get; }
 	}
 }

@@ -1,10 +1,8 @@
-﻿using WerewolfDomain.Entities;
-using WerewolfDomain.Interfaces;
+﻿using WerewolfDomain.Interfaces;
 using WerewolfDomain.Structures;
 
 namespace WerewolfDomainTests.PhaseTests.Mocks {
-	internal class MockPresentor : Presentor {
-
+	internal class PresentorMock : Presentor {
 
 		public Poll PollHidden { get; set; } = null;
 		public void HidePoll(Poll poll) {

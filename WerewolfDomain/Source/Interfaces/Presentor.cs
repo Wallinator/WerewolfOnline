@@ -1,5 +1,4 @@
-﻿using WerewolfDomain.Entities;
-using WerewolfDomain.Structures;
+﻿using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Interfaces {
 	public interface Presentor {

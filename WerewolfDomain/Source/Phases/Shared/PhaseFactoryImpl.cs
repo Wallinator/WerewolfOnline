@@ -6,11 +6,11 @@ using WerewolfDomain.Exceptions;
 
 namespace WerewolfDomain.Phases.Shared {
 	public class PhaseFactoryImpl : PhaseFactory {
-		private readonly Persistor persistor;
+		private readonly Persister persistor;
 		private readonly Presentor presentor;
 		private readonly Dictionary<PhaseType, bool> PhaseExists;
 
-		public PhaseFactoryImpl(Persistor persistor, Presentor presentor, Dictionary<PhaseType, bool> phaseExists) {
+		public PhaseFactoryImpl(Persister persistor, Presentor presentor, Dictionary<PhaseType, bool> phaseExists) {
 			this.persistor = persistor;
 			this.presentor = presentor;
 			PhaseExists = phaseExists;
@@ -21,19 +21,19 @@ namespace WerewolfDomain.Phases.Shared {
 		}
 
 		public override Phase MakeNextPhase(Phase phase) {
-			AbstractPhase abstractPhase = (AbstractPhase)phase;
 			PhaseType currentPhaseType;
 			if (phase is InterruptingPhase) {
 				currentPhaseType = ((InterruptingPhase)phase).PhaseInterrupted;
 			}
 			else {
+				AbstractPhase abstractPhase = (AbstractPhase)phase;
 				currentPhaseType = abstractPhase.PhaseType;
 			}
 
 			if (persistor.NextPhaseExists()) {
 				return persistor.GetNextPhase(currentPhaseType);
 			}
-			return NewPhase(abstractPhase.PhaseType + 1);
+			return NewPhase(currentPhaseType + 1);
 		}
 
 		private Phase NewPhase(PhaseType phaseType) {

@@ -1,6 +1,5 @@
 ﻿using PhaseLibrary;
 using System.Collections.Generic;
-using WerewolfDomain.Entities;
 using WerewolfDomain.Interfaces;
 using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Roles;
@@ -8,7 +7,7 @@ using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Phases {
 	internal class SeerPhase : PollPhase {
-		public SeerPhase(PhaseFactory factory, Persistor persistor, Presentor presentor) : base(factory, persistor, presentor) {
+		public SeerPhase(PhaseFactory factory, Persister persistor, Presentor presentor) : base(factory, persistor, presentor) {
 		}
 
 		public override int DefaultDurationSeconds => 30;

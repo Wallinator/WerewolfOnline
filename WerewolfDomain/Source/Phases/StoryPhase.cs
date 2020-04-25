@@ -5,7 +5,7 @@ using WerewolfDomain.Phases.Shared;
 
 namespace WerewolfDomain.Phases {
 	internal class StoryPhase : AbstractPhase {
-		public StoryPhase(PhaseFactory factory, Persistor persistor, Presentor presentor) : base(factory, persistor, presentor) {
+		public StoryPhase(PhaseFactory factory, Persister persistor, Presentor presentor) : base(factory, persistor, presentor) {
 		}
 
 		protected override bool CanResolve() {

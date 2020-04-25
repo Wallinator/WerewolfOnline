@@ -1,16 +1,15 @@
 ﻿using PhaseLibrary;
 using System.Collections.Generic;
-using WerewolfDomain.Entities;
+using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Interfaces {
-	public interface Persistor {
+	public interface Persister {
 		List<Player> GetLivingPlayers();
 		void AddPoll(Poll poll);
 		Poll GetPoll(PollType type);
-		Phase GetNextPhase();
+		Phase GetNextPhase(PhaseType currentPhaseType);
 		bool NextPhaseExists();
 		void RemovePoll(PollType type);
-		void SetNextPhase(Phase phase);
 	}
 }

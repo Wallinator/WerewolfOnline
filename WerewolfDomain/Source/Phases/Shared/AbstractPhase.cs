@@ -4,12 +4,12 @@ using WerewolfDomain.Interfaces;
 namespace WerewolfDomain.Phases.Shared {
 	internal abstract class AbstractPhase : Phase {
 
-		protected readonly Persistor persistor;
+		protected readonly Persister persistor;
 		protected readonly Presentor presentor;
 		internal abstract PhaseType PhaseType { get; }
 
 
-		protected AbstractPhase(PhaseFactory factory, Persistor persistor, Presentor presentor) : base(factory) {
+		protected AbstractPhase(PhaseFactory factory, Persister persistor, Presentor presentor) : base(factory) {
 			this.persistor = persistor;
 			this.presentor = presentor;
 		}

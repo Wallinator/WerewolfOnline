@@ -1,12 +1,11 @@
 ﻿using System;
-using WerewolfDomain.Entities;
 using WerewolfDomain.Exceptions;
 using WerewolfDomain.Interfaces;
 using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Phases.Shared {
 	internal static class PollResolver {
-		public static void Resolve(Poll poll, Persistor persistor, Presentor presentor) {
+		public static void Resolve(Poll poll, Persister persistor, Presentor presentor) {
 			switch (poll.Type) {
 				case PollType.Ready:
 					ResolveReady(poll, persistor, presentor);
@@ -27,20 +26,20 @@ namespace WerewolfDomain.Phases.Shared {
 					throw new InvalidPollTypeException();
 			}
 		}
-		private static void ResolveReady(Poll poll, Persistor persistor, Presentor presentor) {
+		private static void ResolveReady(Poll poll, Persister persistor, Presentor presentor) {
 			persistor.RemovePoll(poll.Type);
 			presentor.HidePoll(poll);
 			return;
 		}
-		private static void ResolveWerewolf(Poll poll, Persistor persistor, Presentor presentor) {
+		private static void ResolveWerewolf(Poll poll, Persister persistor, Presentor presentor) {
 			throw new NotImplementedException();
 		}
 
-		private static void ResolveVillager(Poll poll, Persistor persistor, Presentor presentor) {
+		private static void ResolveVillager(Poll poll, Persister persistor, Presentor presentor) {
 			throw new NotImplementedException();
 		}
 
-		private static void ResolveSeer(Poll poll, Persistor persistor, Presentor presentor) {
+		private static void ResolveSeer(Poll poll, Persister persistor, Presentor presentor) {
 			foreach (Player seer in poll.Voters) {
 				object choice;
 				if (poll.Votes.TryGetValue(seer, out choice)) {
@@ -51,7 +50,7 @@ namespace WerewolfDomain.Phases.Shared {
 			presentor.HidePoll(poll);
 		}
 
-		private static void ResolveSleep(Poll poll, Persistor persistor, Presentor presentor) {
+		private static void ResolveSleep(Poll poll, Persister persistor, Presentor presentor) {
 			throw new NotImplementedException();
 		}
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using WerewolfDomain.Roles;
 
-namespace WerewolfDomain.Entities {
+namespace WerewolfDomain.Structures {
 	public class Player {
 		public string Id;
 		public string Name;

@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
-using WerewolfDomain.Entities;
 using WerewolfDomain.Structures;
 
 namespace WerewolfDomainTests.PollTests {

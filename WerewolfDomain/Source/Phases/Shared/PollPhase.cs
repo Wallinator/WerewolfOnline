@@ -6,7 +6,6 @@ using WerewolfDomain.Structures;
 namespace WerewolfDomain.Phases.Shared {
 	internal abstract class PollPhase : AbstractPhase {
 
-
 		private List<Poll> GetMyPolls() {
 			List<Poll> polls = new List<Poll>();
 			foreach (PollType type in PollTypes()) {
@@ -15,7 +14,7 @@ namespace WerewolfDomain.Phases.Shared {
 			return polls;
 		}
 		protected abstract List<PollType> PollTypes();
-		protected PollPhase(PhaseFactory factory, Persistor persistor, Presentor presentor) : base(factory, persistor, presentor) {
+		protected PollPhase(PhaseFactory factory, Persister persistor, Presentor presentor) : base(factory, persistor, presentor) {
 		}
 
 		protected override bool CanResolve() {

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using WerewolfDomain.Entities;
+using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Roles {
 	public class Seer : Role {
