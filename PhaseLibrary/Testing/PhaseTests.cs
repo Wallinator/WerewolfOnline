@@ -44,17 +44,23 @@ namespace PhaseTests {
 			Assert.True(phase.PreForceResolveCalled);
 		}
 		[Test]
-		public void NextPhaseReturnedTest() {
+		public void NextPhaseReturnedWhenResolved() {
 			int oldId = phase.Id;
 			phase = (PhaseTestImpl)phase.StateHasChanged();
 			Assert.AreEqual(oldId + 1, phase.Id);
 		}
 		[Test]
-		public void NextTwoPhasesReturnedTest() {
+		public void NextTwoPhasesReturnedWhenResolvedTwice() {
 			int oldId = phase.Id;
 			phase = (PhaseTestImpl)phase.StateHasChanged();
 			phase = (PhaseTestImpl)phase.StateHasChanged();
 			Assert.AreEqual(oldId + 2, phase.Id);
+		}
+		[Test]
+		public void NextPhaseReturnedWhenForceResolved() {
+			int oldId = phase.Id;
+			phase = (PhaseTestImpl)phase.ForceResolve();
+			Assert.AreEqual(oldId + 1, phase.Id);
 		}
 	}
 }

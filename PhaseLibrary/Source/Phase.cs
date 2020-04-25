@@ -26,9 +26,10 @@ namespace PhaseLibrary {
 			IsSetup = true;
 		}
 
-		public void ForceResolve() {
+		public Phase ForceResolve() {
 			PreForceResolve();
 			Resolve();
+			return PhFactory.MakeNextPhase(this);
 		}
 		private void Resolve() {
 			PhaseResolve();
