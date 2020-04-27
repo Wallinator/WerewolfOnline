@@ -21,10 +21,7 @@ namespace WerewolfDomainTests.PhaseTests {
 		public void Setup() {
 			mockPersistor = new PersistorMock();
 			mockPresentor = new PresentorMock();
-			PhaseFactoryImpl factory = new PhaseFactoryImpl(mockPersistor, mockPresentor, mockPersistor.AllPhasesExist());
-			phase = factory.MakeFirstPhase();
-			phase = factory.MakeNextPhase(phase);
-			phase = factory.MakeNextPhase(phase);
+			phase = new PhaseFactoryImpl(mockPersistor, mockPresentor, mockPersistor.AllPhasesExist()).ConstructPhase(PhaseType.Seer);
 			seer.Role = new Seer();
 			werewolf.Role = new Werewolf();
 			villager.Role = new Villager();
@@ -54,7 +51,7 @@ namespace WerewolfDomainTests.PhaseTests {
 
 			phase.StateHasChanged();
 			Poll poll = mockPersistor.GetPoll(PollType.Seer);
-			List<string> choicesactual = poll.Choices.ConvertAll(obj => (string)obj);
+			List<string> choicesactual = poll.Choices.ConvertAll(obj => (string) obj);
 			choicesactual.Sort();
 			List<string> choicesexpected = mockPersistor.GetLivingPlayers().FindAll(x => x.Role.Name != RoleName.Seer).ConvertAll(player => player.Name);
 			choicesexpected.Sort();

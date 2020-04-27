@@ -1,8 +1,8 @@
 ﻿using PhaseLibrary;
 using System;
 using System.Collections.Generic;
-using WerewolfDomain.Interfaces;
 using WerewolfDomain.Exceptions;
+using WerewolfDomain.Interfaces;
 
 namespace WerewolfDomain.Phases.Shared {
 	public class PhaseFactoryImpl : PhaseFactory {
@@ -23,10 +23,10 @@ namespace WerewolfDomain.Phases.Shared {
 		public override Phase MakeNextPhase(Phase phase) {
 			PhaseType currentPhaseType;
 			if (phase is InterruptingPhase) {
-				currentPhaseType = ((InterruptingPhase)phase).PhaseInterrupted;
+				currentPhaseType = ((InterruptingPhase) phase).PhaseInterrupted;
 			}
 			else {
-				AbstractPhase abstractPhase = (AbstractPhase)phase;
+				AbstractPhase abstractPhase = (AbstractPhase) phase;
 				currentPhaseType = abstractPhase.PhaseType;
 			}
 
@@ -45,7 +45,7 @@ namespace WerewolfDomain.Phases.Shared {
 			}
 		}
 
-		private Phase ConstructPhase(PhaseType phaseType) {
+		public Phase ConstructPhase(PhaseType phaseType) {
 			return phaseType switch
 			{
 				PhaseType.Introduction => new IntroductionPhase(this, persistor, presentor),
@@ -69,7 +69,7 @@ namespace WerewolfDomain.Phases.Shared {
 		Discussion,
 		Jury,
 		Execution,
-		//wrapper must be on button
+		//wrapper must be on bottom
 		Wrapper
 	}
 }

@@ -6,7 +6,9 @@ namespace WerewolfDomain.Phases.Shared {
 
 		protected readonly Persister persistor;
 		protected readonly Presentor presentor;
-		internal abstract PhaseType PhaseType { get; }
+		internal abstract PhaseType PhaseType {
+			get;
+		}
 
 
 		protected AbstractPhase(PhaseFactory factory, Persister persistor, Presentor presentor) : base(factory) {

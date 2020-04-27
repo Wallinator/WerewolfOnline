@@ -83,7 +83,7 @@ namespace WerewolfDomainTests.PollTests {
 			poll.PlaceVote(p3, 2);
 			poll.PlaceVote(p4, 2);
 			poll.PlaceVote(p5, 1);
-			Assert.AreEqual(1, (int)poll.Winners().First());
+			Assert.AreEqual(1, (int) poll.Winners().First());
 		}
 		[Test]
 		public void PollShouldReportWinnersWhenMultipleWinners() {
@@ -92,7 +92,7 @@ namespace WerewolfDomainTests.PollTests {
 			poll.PlaceVote(p3, 2);
 			poll.PlaceVote(p4, 2);
 			poll.PlaceVote(p5, 3);
-			List<int> actual = poll.Winners().ConvertAll(x => (int)x);
+			List<int> actual = poll.Winners().ConvertAll(x => (int) x);
 			List<int> expected = new List<int>() { 1, 2 };
 			actual.Sort();
 			expected.Sort();

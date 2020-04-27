@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using PhaseLibrary;
 using System.Collections.Generic;
-using WerewolfDomain.Entities;
 using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Structures;
 using WerewolfDomainTests.PhaseTests.Mocks;
@@ -11,15 +10,15 @@ namespace WerewolfDomainTests.PhaseTests {
 		private Phase phase;
 		private PersistorMock mockPersister;
 		private PresentorMock mockPresentor;
-		private Player p1 = new Player("1", "abby");
-		private Player p2 = new Player("2", "bob");
-		private Player p3 = new Player("3", "claire");
+		private readonly Player p1 = new Player("1", "abby");
+		private readonly Player p2 = new Player("2", "bob");
+		private readonly Player p3 = new Player("3", "claire");
 
 		[SetUp]
 		public void Setup() {
 			mockPersister = new PersistorMock();
 			mockPresentor = new PresentorMock();
-			phase = new PhaseFactoryImpl(mockPersister, mockPresentor, mockPersister.AllPhasesExist()).MakeFirstPhase();
+			phase = new PhaseFactoryImpl(mockPersister, mockPresentor, mockPersister.AllPhasesExist()).ConstructPhase(PhaseType.Introduction);
 			mockPersister.Players = new List<Player>() {
 				p1,
 				p2,

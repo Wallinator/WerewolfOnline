@@ -83,10 +83,16 @@ namespace WerewolfDomain.Structures {
 			return Winners;
 		}
 
-		private readonly struct Vote  {
-			public readonly Player Voter { get; }
-			public readonly object Choice { get; }
-			private readonly int Hash { get; }
+		private readonly struct Vote {
+			public readonly Player Voter {
+				get;
+			}
+			public readonly object Choice {
+				get;
+			}
+			private readonly int Hash {
+				get;
+			}
 			public Vote(Player voter, object choice) {
 				Voter = voter;
 				Choice = choice;
@@ -107,6 +113,7 @@ namespace WerewolfDomain.Structures {
 		Villager,
 		Seer,
 		Ready,
-		Sleep
+		Sleep,
+		Storyteller
 	}
 }

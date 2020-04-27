@@ -43,7 +43,7 @@ namespace WerewolfDomain.Phases.Shared {
 			foreach (Player seer in poll.Voters) {
 				object choice;
 				if (poll.Votes.TryGetValue(seer, out choice)) {
-					presentor.ShowSeerPlayerRole(seer, (string)choice);
+					presentor.ShowSeerPlayerRole(seer, (string) choice);
 				}
 			}
 			persistor.RemovePoll(poll.Type);
