@@ -22,27 +22,25 @@ namespace WerewolfDomain.Structures {
 				Results[choice] = 0;
 			}
 		}
-		public bool PlaceVote(Player player, object choice) {
-			Vote vote = new Vote(player, choice);
-			if (Closed || !Voters.Contains(vote.Voter) || !Choices.Contains(vote.Choice)) {
+		public bool PlaceVote(Player voter, object choice) {
+			if (Closed || !Voters.Contains(voter) || !Choices.Contains(choice)) {
 				return false;
 			}
 
-			if (Voted.Contains(vote.Voter)) {
-
-				Vote PreviousVote = new Vote(vote.Voter, Votes[vote.Voter]);
-				if (PreviousVote.Equals(vote)) {
+			if (Voted.Contains(voter)) {
+				object PreviousVote = Votes[voter];
+				if (PreviousVote.Equals(choice)) {
 					return true;
 				}
 				else {
-					RemoveVote(PreviousVote);
+					RemoveVote(voter, choice);
 				}
 			}
 			else {
-				Voted.Add(vote.Voter);
+				Voted.Add(voter);
 			}
 
-			AddVote(vote);
+			AddVote(voter, choice);
 
 			if (Voted.Count == Voters.Count) {
 				ClosePoll();
@@ -51,14 +49,14 @@ namespace WerewolfDomain.Structures {
 			return true;
 		}
 
-		private void RemoveVote(Vote vote) {
-			Votes.Remove(vote.Voter);
-			--Results[vote.Choice];
+		private void RemoveVote(Player voter, object choice) {
+			Votes.Remove(voter);
+			--Results[choice];
 		}
 
-		private void AddVote(Vote vote) {
-			Votes.Add(vote.Voter, vote.Choice);
-			++Results[vote.Choice];
+		private void AddVote(Player voter, object choice) {
+			Votes.Add(voter, choice);
+			++Results[choice];
 		}
 
 
@@ -83,30 +81,6 @@ namespace WerewolfDomain.Structures {
 			return Winners;
 		}
 
-		private readonly struct Vote {
-			public readonly Player Voter {
-				get;
-			}
-			public readonly object Choice {
-				get;
-			}
-			private readonly int Hash {
-				get;
-			}
-			public Vote(Player voter, object choice) {
-				Voter = voter;
-				Choice = choice;
-				Hash = HashCode.Combine(Voter, Choice);
-			}
-			public override int GetHashCode() {
-				return Hash;
-			}
-			public override bool Equals(object obj) {
-				return obj is Vote vote &&
-					   EqualityComparer<Player>.Default.Equals(Voter, vote.Voter) &&
-					   EqualityComparer<object>.Default.Equals(Choice, vote.Choice);
-			}
-		}
 	}
 	public enum PollType {
 		Werewolf,
