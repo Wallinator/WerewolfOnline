@@ -21,7 +21,7 @@ namespace PhaseTests {
 		}
 		[Test]
 		public void PhaseSetUpCalled() {
-			phase.StateHasChanged();
+			phase.SetUp();
 			Assert.True(phase.PhaseSetUpCalled);
 		}
 		[Test]

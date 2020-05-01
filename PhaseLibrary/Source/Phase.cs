@@ -11,28 +11,32 @@ namespace PhaseLibrary {
 			PhFactory = factory;
 		}
 
-		public Phase StateHasChanged() {
-			if (!IsSetup) {
-				SetUp();
-			}
+		public virtual Phase StateHasChanged() {
 			if (CanResolve()) {
 				Resolve();
-				return PhFactory.MakeNextPhase(this);
+				return NextPhase();
 			}
 			return this;
 		}
-		private void SetUp() {
-			PhaseSetUp();
-			IsSetup = true;
+
+
+		public virtual void SetUp() {
+			if (!IsSetup) {
+				PhaseSetUp();
+				IsSetup = true;
+			}
 		}
 
-		public Phase ForceResolve() {
+		public virtual Phase ForceResolve() {
 			PreForceResolve();
 			Resolve();
-			return PhFactory.MakeNextPhase(this);
+			return NextPhase();
 		}
 		private void Resolve() {
 			PhaseResolve();
+		}
+		protected Phase NextPhase() {
+			return PhFactory.MakeNextPhase(this);
 		}
 
 		protected abstract void PhaseSetUp();
