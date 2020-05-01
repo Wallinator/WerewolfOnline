@@ -28,33 +28,33 @@ namespace WerewolfDomainTests.PhaseTests {
 
 		[Test]
 		public void WhenPollAddedShouldBePresented() {
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersister.GetPoll(PollType.Ready);
 			Assert.AreEqual(poll, mockPresentor.PollShown);
 		}
 		[Test]
 		public void WhenPollAddedShouldBeTypeReady() {
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersister.GetPoll(PollType.Ready);
 			Assert.AreEqual(PollType.Ready, poll.Type);
 		}
 		[Test]
 		public void WhenPollAddedShouldBeForAllPlayers() {
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersister.GetPoll(PollType.Ready);
 			Assert.IsTrue(poll.Voters.SetEquals(mockPersister.Players));
 		}
 
 		[Test]
 		public void GivenPollOpenPhaseShouldNotResolve() {
-			phase.StateHasChanged();
+			phase.SetUp();
 			Phase newPhase = phase.StateHasChanged();
 			Assert.AreSame(phase, newPhase);
 		}
 
 		[Test]
 		public void GivenPollClosedPhaseShouldResolve() {
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersister.GetPoll(PollType.Ready);
 			poll.ClosePoll();
 			Phase newPhase = phase.StateHasChanged();
@@ -62,7 +62,7 @@ namespace WerewolfDomainTests.PhaseTests {
 		}
 		[Test]
 		public void ShouldRemovePollWhenResolved() {
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersister.GetPoll(PollType.Ready);
 			poll.ClosePoll();
 			phase.StateHasChanged();

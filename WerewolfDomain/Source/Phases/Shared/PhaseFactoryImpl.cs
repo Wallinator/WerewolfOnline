@@ -46,6 +46,7 @@ namespace WerewolfDomain.Phases.Shared {
 		}
 
 		public Phase ConstructPhase(PhaseType phaseType) {
+			persistor.SetPhaseSetup(false);
 			return phaseType switch
 			{
 				PhaseType.Introduction => new IntroductionPhase(this, persistor, presentor),

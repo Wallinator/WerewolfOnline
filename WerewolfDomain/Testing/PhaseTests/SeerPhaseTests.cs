@@ -35,21 +35,21 @@ namespace WerewolfDomainTests.PhaseTests {
 		[Test]
 		public void PollAddedShouldBeTypeSeer() {
 
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersistor.GetPoll(PollType.Seer);
 			Assert.AreEqual(PollType.Seer, poll.Type);
 		}
 		[Test]
 		public void PollAddedShouldBeForSeer() {
 
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersistor.GetPoll(PollType.Seer);
 			Assert.IsTrue(poll.Voters.SetEquals(mockPersistor.GetLivingPlayers().FindAll(x => x.Role.Name == RoleName.Seer)));
 		}
 		[Test]
 		public void PollAddedShouldHaveChoicesNonSeers() {
 
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersistor.GetPoll(PollType.Seer);
 			List<string> choicesactual = poll.Choices.ConvertAll(obj => (string) obj);
 			choicesactual.Sort();
@@ -60,7 +60,7 @@ namespace WerewolfDomainTests.PhaseTests {
 		[Test]
 		public void ShouldResolveWhenVoted() {
 
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersistor.GetPoll(PollType.Seer);
 			poll.PlaceVote(seer, werewolf.Name);
 
@@ -71,7 +71,7 @@ namespace WerewolfDomainTests.PhaseTests {
 		[Test]
 		public void ShouldDoNothingWhenForceResolved() {
 
-			phase.StateHasChanged();
+			phase.SetUp();
 
 			Phase newPhase = phase.ForceResolve();
 			Assert.IsNull(mockPresentor.NameOfPlayerShownToSeer);
@@ -80,7 +80,7 @@ namespace WerewolfDomainTests.PhaseTests {
 		[Test]
 		public void ShouldShowSeerChosenPlayerRoleWhenResolved() {
 
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersistor.GetPoll(PollType.Seer);
 			poll.PlaceVote(seer, werewolf.Name);
 
@@ -90,13 +90,13 @@ namespace WerewolfDomainTests.PhaseTests {
 		}
 		[Test]
 		public void SeerPhaseShouldNotResolveWhenPollOpen() {
-			phase.StateHasChanged();
+			phase.SetUp();
 			Phase newPhase = phase.StateHasChanged();
 			Assert.AreSame(phase, newPhase);
 		}
 		[Test]
 		public void SeerPhaseShouldGiveNextPhaseWhenPollClosed() {
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersistor.GetPoll(PollType.Seer);
 			poll.ClosePoll();
 			Phase newPhase = phase.StateHasChanged();
@@ -104,7 +104,7 @@ namespace WerewolfDomainTests.PhaseTests {
 		}
 		[Test]
 		public void SeerPhaseShouldRemovePollWhenResolved() {
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersistor.GetPoll(PollType.Seer);
 			poll.ClosePoll();
 			phase.StateHasChanged();

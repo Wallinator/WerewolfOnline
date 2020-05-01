@@ -18,6 +18,7 @@ namespace WerewolfDomain.Entities {
 			Polls.RemoveAll(p => p.Type == type);
 		}
 
+
 		public List<Player> Players;
 		public List<Player> GetLivingPlayers() {
 			return Players;
@@ -36,5 +37,14 @@ namespace WerewolfDomain.Entities {
 			return NextPhases.Count != 0;
 		}
 
+
+		public bool PhaseSetup = false;
+		public bool IsPhaseSetup() {
+			return PhaseSetup;
+		}
+
+		public void SetPhaseSetup(bool Setup) {
+			PhaseSetup = Setup;
+		}
 	}
 }

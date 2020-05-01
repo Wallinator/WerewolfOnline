@@ -21,7 +21,7 @@ namespace WerewolfDomain.Phases.Shared {
 			return GetMyPolls().TrueForAll(poll => poll.Closed);
 		}
 
-		protected override void ConcreteResolve() {
+		protected override void PhaseResolve() {
 			GetMyPolls().ForEach((poll) => {
 				PollResolver.Resolve(poll, persistor, presentor);
 			});

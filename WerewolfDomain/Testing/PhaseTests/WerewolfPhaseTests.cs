@@ -35,7 +35,7 @@ namespace WerewolfDomainTests.PhaseTests {
 
 		[Test]
 		public void WhenPollAddedShouldBePresented() {
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersistor.GetPoll(PollType.Werewolf);
 			Assert.AreEqual(poll, mockPresentor.PollShown);
 		}
@@ -43,21 +43,21 @@ namespace WerewolfDomainTests.PhaseTests {
 		[Test]
 		public void WhenPollAddedShouldBeTypeWerewolf() {
 
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersistor.GetPoll(PollType.Werewolf);
 			Assert.AreEqual(PollType.Werewolf, poll.Type);
 		}
 		[Test]
 		public void WhenPollAddedShouldBeForWerewolves() {
 
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersistor.GetPoll(PollType.Werewolf);
 			Assert.IsTrue(poll.Voters.SetEquals(mockPersistor.Players.FindAll(player => player.Role.Name == RoleName.Werewolf)));
 		}
 		[Test]
 		public void WhenPollAddedShouldHaveChoicesNonWerewolves() {
 
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersistor.GetPoll(PollType.Werewolf);
 			List<string> choicesactual = poll.Choices.ConvertAll(obj => (string) obj);
 			choicesactual.Sort();
@@ -69,12 +69,13 @@ namespace WerewolfDomainTests.PhaseTests {
 
 		[Test]
 		public void GivenPollOpenShouldNotResolve() {
+			phase.SetUp();
 			Phase newPhase = phase.StateHasChanged();
 			Assert.AreSame(phase, newPhase);
 		}
 		[Test]
 		public void GivenPollClosedPhaseShouldResolve() {
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersistor.GetPoll(PollType.Werewolf);
 			poll.ClosePoll();
 			Phase newPhase = phase.StateHasChanged();
@@ -82,7 +83,7 @@ namespace WerewolfDomainTests.PhaseTests {
 		}
 		[Test]
 		public void GivenPhaseResolvedPollShouldNotBeRemoved() {
-			phase.StateHasChanged();
+			phase.SetUp();
 			Poll poll = mockPersistor.GetPoll(PollType.Werewolf);
 			poll.ClosePoll();
 			phase.StateHasChanged();
@@ -90,7 +91,7 @@ namespace WerewolfDomainTests.PhaseTests {
 		}
 		[Test]
 		public void GivenPhaseForceResolvedPollShouldBeClosed() {
-			phase.StateHasChanged();
+			phase.SetUp();
 			phase.ForceResolve();
 			Poll poll = mockPersistor.GetPoll(PollType.Werewolf);
 			Assert.IsTrue(poll.Closed);

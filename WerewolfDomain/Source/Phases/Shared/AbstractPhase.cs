@@ -4,6 +4,7 @@ using WerewolfDomain.Interfaces;
 namespace WerewolfDomain.Phases.Shared {
 	internal abstract class AbstractPhase : Phase {
 
+
 		protected readonly Persister persistor;
 		protected readonly Presentor presentor;
 		internal abstract PhaseType PhaseType {
@@ -15,10 +16,11 @@ namespace WerewolfDomain.Phases.Shared {
 			this.persistor = persistor;
 			this.presentor = presentor;
 		}
-		protected sealed override void PhaseResolve() {
-			ConcreteResolve();
+		public sealed override void SetUp() {
+			if (!persistor.IsPhaseSetup()) {
+				PhaseSetUp();
+				persistor.SetPhaseSetup(true);
+			}
 		}
-		protected abstract void ConcreteResolve();
-
 	}
 }
