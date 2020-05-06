@@ -132,7 +132,7 @@ namespace WerewolfDomainTests.PhaseTests.StoryPhase {
 			werewolfpoll.PlaceVote(werewolf1, villager.Name);
 			werewolfpoll.PlaceVote(werewolf2, villager.Name);
 			phase.StateHasChanged();
-			WerewolfKillEvent gameEvent = (WerewolfKillEvent) mockPresentor.visibleEvents.Find(e => e.Type == EventType.WerewolfKill);
+			WerewolfKillEvent gameEvent = mockPresentor.visibleEvents.Find(e => e.Type == EventType.WerewolfKill) as WerewolfKillEvent;
 			Assert.AreEqual(villager.Name, gameEvent.VictimName);
 		}
 	}

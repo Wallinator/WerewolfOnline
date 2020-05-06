@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using WerewolfDomain.Exceptions;
 using WerewolfDomain.Interfaces;
+using WerewolfDomain.Interfaces.Persisters;
 
 namespace WerewolfDomain.Phases.Shared {
 	public class PhaseFactoryImpl : PhaseFactory {

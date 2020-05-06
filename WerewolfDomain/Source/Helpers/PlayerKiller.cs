@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using WerewolfDomain.Interfaces;
+using WerewolfDomain.Interfaces.Persisters;
 using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
 using WerewolfDomain.Structures.GameEvents;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WerewolfDomain.Exceptions;
 using WerewolfDomain.Interfaces;
+using WerewolfDomain.Interfaces.Persisters;
 using WerewolfDomain.Structures;
 using WerewolfDomain.Structures.GameEvents;
 

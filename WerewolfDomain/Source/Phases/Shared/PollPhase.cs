@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using WerewolfDomain.Helpers;
 using WerewolfDomain.Interfaces;
+using WerewolfDomain.Interfaces.Persisters;
 using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Phases.Shared {

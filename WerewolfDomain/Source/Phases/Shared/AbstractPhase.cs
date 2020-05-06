@@ -1,5 +1,6 @@
 ﻿using PhaseLibrary;
 using WerewolfDomain.Interfaces;
+using WerewolfDomain.Interfaces.Persisters;
 
 namespace WerewolfDomain.Phases.Shared {
 	internal abstract class AbstractPhase : Phase {

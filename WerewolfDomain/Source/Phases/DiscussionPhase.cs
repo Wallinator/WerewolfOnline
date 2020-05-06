@@ -1,6 +1,7 @@
 ﻿using PhaseLibrary;
 using System.Collections.Generic;
 using WerewolfDomain.Interfaces;
+using WerewolfDomain.Interfaces.Persisters;
 using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Structures;
 

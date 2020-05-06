@@ -1,6 +1,6 @@
 ﻿using PhaseLibrary;
 using System.Collections.Generic;
-using WerewolfDomain.Interfaces;
+using WerewolfDomain.Interfaces.Persisters;
 using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Structures;
 
@@ -8,49 +8,49 @@ namespace WerewolfDomain.Entities {
 	public class PersisterObject : Persister {
 
 		public List<Poll> Polls = new List<Poll>();
-		void Persister.AddPoll(Poll poll) {
+		void PollPersister.AddPoll(Poll poll) {
 			Polls.Add(poll);
 		}
-		Poll Persister.GetPoll(PollType type) {
+		Poll PollPersister.GetPoll(PollType type) {
 			Poll poll = Polls.Find(p => p.Type == type);
 			return new Poll(poll);
 		}
-		void Persister.RemovePoll(PollType type) {
+		void PollPersister.RemovePoll(PollType type) {
 			Polls.RemoveAll(p => p.Type == type);
 		}
-		void Persister.PlaceVote(Player player, object choice, PollType type) {
+		void PollPersister.PlaceVote(Player player, object choice, PollType type) {
 			Poll poll = Polls.Find(p => p.Type == type);
 			poll.PlaceVote(player, choice);
 		}
 
+
 		public List<Player> AllPlayers;
-		List<Player> Persister.GetAllPlayers() {
+		List<Player> PlayerPersister.GetAllPlayers() {
 			return AllPlayers.ConvertAll(x => new Player(x));
 		}
-		void Persister.UpdatePlayer(Player player) {
+		void PlayerPersister.UpdatePlayer(Player player) {
 			AllPlayers.RemoveAll(p => p.Name.Equals(player.Name));
 			AllPlayers.Add(player);
 		}
 
+
 		public Stack<Phase> NextPhases = new Stack<Phase>();
-		Phase Persister.GetNextPhase(PhaseType currentPhaseType) {
+		Phase PhasePersister.GetNextPhase(PhaseType currentPhaseType) {
 			return NextPhases.Pop();
 		}
-		public void AddNextPhase(Phase phase) {
+		void PhasePersister.AddNextPhase(Phase phase) {
 			NextPhases.Push(phase);
 		}
-
-		bool Persister.NextPhaseExists() {
+		bool PhasePersister.NextPhaseExists() {
 			return NextPhases.Count != 0;
 		}
 
 
 		public bool PhaseSetup = false;
-		bool Persister.IsPhaseSetup() {
+		bool PhasePersister.IsPhaseSetup() {
 			return PhaseSetup;
 		}
-
-		void Persister.SetPhaseSetup(bool Setup) {
+		void PhasePersister.SetPhaseSetup(bool Setup) {
 			PhaseSetup = Setup;
 		}
 
