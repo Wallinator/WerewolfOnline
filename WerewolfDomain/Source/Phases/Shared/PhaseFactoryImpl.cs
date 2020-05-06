@@ -70,7 +70,8 @@ namespace WerewolfDomain.Phases.Shared {
 		Discussion,
 		Jury,
 		Execution,
-		//wrapper must be on bottom
 		Wrapper
+		//wrapper must be on bottom of ordered phases
+
 	}
 }

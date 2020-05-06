@@ -23,8 +23,8 @@ namespace WerewolfDomain.Phases {
 		}
 
 		protected override List<Poll> ConstructPolls() {
-			List<Player> wolves = persistor.GetLivingPlayers().FindAll(player => player.Role.Name == RoleName.Werewolf);
-			List<Player> nonWolves = persistor.GetLivingPlayers().FindAll(player => player.Role.Name != RoleName.Werewolf);
+			List<Player> wolves = persistor.GetAllPlayers().FindAll(player => player.Role.Name == RoleName.Werewolf);
+			List<Player> nonWolves = persistor.GetAllPlayers().FindAll(player => player.Role.Name != RoleName.Werewolf && player.Role.Name != RoleName.Spectator);
 			List<Poll> polls = new List<Poll>() {
 				new Poll(wolves, nonWolves.ConvertAll(player => player.Name), PollType.Werewolf)
 			};

@@ -5,6 +5,7 @@ using System.Linq;
 using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
+using WerewolfDomain.Structures.GameEvents;
 using WerewolfDomainTests.PhaseTests.Mocks;
 
 namespace WerewolfDomainTests.PhaseTests {
@@ -25,11 +26,19 @@ namespace WerewolfDomainTests.PhaseTests {
 			seer.Role = new Seer();
 			werewolf.Role = new Werewolf();
 			villager.Role = new Villager();
-			mockPersistor.Players = new List<Player>() {
+			mockPersistor.AllPlayers = new List<Player>() {
 				seer,
 				werewolf,
 				villager,
 			};
+		}
+
+
+		[Test]
+		public void WhenPollAddedShouldBePresented() {
+			phase.SetUp();
+			Poll poll = mockPersistor.GetPoll(PollType.Seer);
+			Assert.AreEqual(poll, mockPresentor.PollShown);
 		}
 
 		[Test]
@@ -44,7 +53,7 @@ namespace WerewolfDomainTests.PhaseTests {
 
 			phase.SetUp();
 			Poll poll = mockPersistor.GetPoll(PollType.Seer);
-			Assert.IsTrue(poll.Voters.SetEquals(mockPersistor.GetLivingPlayers().FindAll(x => x.Role.Name == RoleName.Seer)));
+			Assert.IsTrue(poll.Voters.SetEquals(mockPersistor.GetAllPlayers().FindAll(x => x.Role.Name == RoleName.Seer)));
 		}
 		[Test]
 		public void PollAddedShouldHaveChoicesNonSeers() {
@@ -53,7 +62,11 @@ namespace WerewolfDomainTests.PhaseTests {
 			Poll poll = mockPersistor.GetPoll(PollType.Seer);
 			List<string> choicesactual = poll.Choices.ConvertAll(obj => (string) obj);
 			choicesactual.Sort();
-			List<string> choicesexpected = mockPersistor.GetLivingPlayers().FindAll(x => x.Role.Name != RoleName.Seer).ConvertAll(player => player.Name);
+			List<string> choicesexpected = mockPersistor.GetAllPlayers()
+				.FindAll(x =>	x.Role.Name != RoleName.Seer &&
+								x.Role.Name != RoleName.Spectator)
+				.ConvertAll(player => player.Name);
+
 			choicesexpected.Sort();
 			Assert.IsTrue(choicesactual.SequenceEqual(choicesexpected));
 		}
@@ -74,19 +87,37 @@ namespace WerewolfDomainTests.PhaseTests {
 			phase.SetUp();
 
 			Phase newPhase = phase.ForceResolve();
-			Assert.IsNull(mockPresentor.NameOfPlayerShownToSeer);
-			Assert.IsNull(mockPresentor.SeerShownRole);
+			Assert.IsEmpty(mockPresentor.visibleEvents);
 		}
 		[Test]
-		public void ShouldShowSeerChosenPlayerRoleWhenResolved() {
+		public void ShouldShowSeerWhenResolved() {
 
 			phase.SetUp();
 			Poll poll = mockPersistor.GetPoll(PollType.Seer);
 			poll.PlaceVote(seer, werewolf.Name);
-
 			Phase newPhase = phase.StateHasChanged();
-			Assert.AreEqual(werewolf.Name, mockPresentor.NameOfPlayerShownToSeer);
-			Assert.AreEqual(seer, mockPresentor.SeerShownRole);
+			SeerRevealEvent seerRevealEvent = (SeerRevealEvent) mockPresentor.visibleEvents.Find(x => x is SeerRevealEvent);
+			Assert.IsTrue(seerRevealEvent.Players.Contains(seer));
+		}
+		[Test]
+		public void ShouldShowChosenPlayerNameWhenResolved() {
+
+			phase.SetUp();
+			Poll poll = mockPersistor.GetPoll(PollType.Seer);
+			poll.PlaceVote(seer, werewolf.Name);
+			Phase newPhase = phase.StateHasChanged();
+			SeerRevealEvent seerRevealEvent = (SeerRevealEvent) mockPresentor.visibleEvents.Find(x => x is SeerRevealEvent);
+			Assert.AreEqual(werewolf.Name, seerRevealEvent.RevealedName);
+		}
+		[Test]
+		public void ShouldShowChosenPlayerRoleWhenResolved() {
+
+			phase.SetUp();
+			Poll poll = mockPersistor.GetPoll(PollType.Seer);
+			poll.PlaceVote(seer, werewolf.Name);
+			Phase newPhase = phase.StateHasChanged();
+			SeerRevealEvent seerRevealEvent = (SeerRevealEvent) mockPresentor.visibleEvents.Find(x => x is SeerRevealEvent);
+			Assert.AreEqual(RoleName.Werewolf, seerRevealEvent.RevealedRole);
 		}
 		[Test]
 		public void SeerPhaseShouldNotResolveWhenPollOpen() {
@@ -110,6 +141,15 @@ namespace WerewolfDomainTests.PhaseTests {
 			phase.StateHasChanged();
 			Assert.AreEqual(0, mockPersistor.Polls.Count);
 			Assert.AreEqual(poll, mockPresentor.PollHidden);
+		}
+		[Test]
+		public void SeerPhaseShouldNotRemoveSeerEventWhenResolved() {
+			phase.SetUp();
+			Poll poll = mockPersistor.GetPoll(PollType.Seer);
+			poll.PlaceVote(seer, werewolf.Name);
+			poll.ClosePoll();
+			phase.StateHasChanged();
+			Assert.IsTrue(mockPresentor.visibleEvents.Any(x => x is SeerRevealEvent));
 		}
 	}
 }

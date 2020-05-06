@@ -8,43 +8,51 @@ namespace WerewolfDomain.Entities {
 	public class PersisterObject : Persister {
 
 		public List<Poll> Polls = new List<Poll>();
-		public void AddPoll(Poll poll) {
+		void Persister.AddPoll(Poll poll) {
 			Polls.Add(poll);
 		}
-		public Poll GetPoll(PollType type) {
-			return Polls.Find(p => p.Type == type);
+		Poll Persister.GetPoll(PollType type) {
+			Poll poll = Polls.Find(p => p.Type == type);
+			return new Poll(poll);
 		}
-		public void RemovePoll(PollType type) {
+		void Persister.RemovePoll(PollType type) {
 			Polls.RemoveAll(p => p.Type == type);
 		}
-
-
-		public List<Player> Players;
-		public List<Player> GetLivingPlayers() {
-			return Players;
+		void Persister.PlaceVote(Player player, object choice, PollType type) {
+			Poll poll = Polls.Find(p => p.Type == type);
+			poll.PlaceVote(player, choice);
 		}
 
+		public List<Player> AllPlayers;
+		List<Player> Persister.GetAllPlayers() {
+			return AllPlayers.ConvertAll(x => new Player(x));
+		}
+		void Persister.UpdatePlayer(Player player) {
+			AllPlayers.RemoveAll(p => p.Name.Equals(player.Name));
+			AllPlayers.Add(player);
+		}
 
 		public Stack<Phase> NextPhases = new Stack<Phase>();
-		public Phase GetNextPhase(PhaseType currentPhaseType) {
+		Phase Persister.GetNextPhase(PhaseType currentPhaseType) {
 			return NextPhases.Pop();
 		}
 		public void AddNextPhase(Phase phase) {
 			NextPhases.Push(phase);
 		}
 
-		public bool NextPhaseExists() {
+		bool Persister.NextPhaseExists() {
 			return NextPhases.Count != 0;
 		}
 
 
 		public bool PhaseSetup = false;
-		public bool IsPhaseSetup() {
+		bool Persister.IsPhaseSetup() {
 			return PhaseSetup;
 		}
 
-		public void SetPhaseSetup(bool Setup) {
+		void Persister.SetPhaseSetup(bool Setup) {
 			PhaseSetup = Setup;
 		}
+
 	}
 }

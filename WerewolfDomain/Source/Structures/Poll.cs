@@ -22,6 +22,11 @@ namespace WerewolfDomain.Structures {
 				Results[choice] = 0;
 			}
 		}
+		public Poll(Poll poll) : this(poll.Voters, poll.Choices, poll.Type) {
+			foreach (KeyValuePair<Player, object> vote in poll.Votes) {
+				PlaceVote(vote.Key, vote.Value);
+			}
+		}
 		public bool PlaceVote(Player voter, object choice) {
 			if (Closed || !Voters.Contains(voter) || !Choices.Contains(choice)) {
 				return false;

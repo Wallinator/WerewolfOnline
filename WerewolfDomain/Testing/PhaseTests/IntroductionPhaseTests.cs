@@ -2,6 +2,7 @@ using NUnit.Framework;
 using PhaseLibrary;
 using System.Collections.Generic;
 using WerewolfDomain.Phases.Shared;
+using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
 using WerewolfDomainTests.PhaseTests.Mocks;
 
@@ -19,7 +20,7 @@ namespace WerewolfDomainTests.PhaseTests {
 			mockPersister = new PersistorMock();
 			mockPresentor = new PresentorMock();
 			phase = new PhaseFactoryImpl(mockPersister, mockPresentor, mockPersister.AllPhasesExist()).ConstructPhase(PhaseType.Introduction);
-			mockPersister.Players = new List<Player>() {
+			mockPersister.AllPlayers = new List<Player>() {
 				p1,
 				p2,
 				p3,
@@ -42,7 +43,7 @@ namespace WerewolfDomainTests.PhaseTests {
 		public void WhenPollAddedShouldBeForAllPlayers() {
 			phase.SetUp();
 			Poll poll = mockPersister.GetPoll(PollType.Ready);
-			Assert.IsTrue(poll.Voters.SetEquals(mockPersister.Players));
+			Assert.IsTrue(poll.Voters.SetEquals(mockPersister.AllPlayers.FindAll(x => x.Role.Name != RoleName.Spectator)));
 		}
 
 		[Test]

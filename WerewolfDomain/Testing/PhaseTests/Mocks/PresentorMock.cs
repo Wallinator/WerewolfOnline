@@ -1,24 +1,25 @@
-﻿using WerewolfDomain.Interfaces;
+﻿using System.Collections.Generic;
+using WerewolfDomain.Interfaces;
 using WerewolfDomain.Structures;
+using WerewolfDomain.Structures.GameEvents;
 
 namespace WerewolfDomainTests.PhaseTests.Mocks {
 	internal class PresentorMock : Presentor {
 
 		public Poll PollHidden { get; set; } = null;
-		public void HidePoll(Poll poll) {
+		void Presentor.HidePoll(Poll poll) {
 			PollHidden = poll;
 		}
 
 		public Poll PollShown { get; set; } = null;
-		public void ShowPoll(Poll poll) {
+		void Presentor.ShowPoll(Poll poll) {
 			PollShown = poll;
 		}
 
-		public Player SeerShownRole { get; set; } = null;
-		public string NameOfPlayerShownToSeer { get; set; } = null;
-		public void ShowSeerPlayerRole(Player seer, string playerName) {
-			SeerShownRole = seer;
-			NameOfPlayerShownToSeer = playerName;
+		public List<GameEvent> visibleEvents = new List<GameEvent>();
+
+		void Presentor.ShowEvent(GameEvent gameEvent) {
+			visibleEvents.Add(gameEvent);
 		}
 	}
 }

@@ -10,17 +10,14 @@ namespace WerewolfDomain.Phases.Shared {
 		internal abstract PhaseType PhaseType {
 			get;
 		}
-
+		protected override bool IsSetup {
+			get => persistor.IsPhaseSetup();
+			set => persistor.SetPhaseSetup(value);
+		}
 
 		protected AbstractPhase(PhaseFactory factory, Persister persistor, Presentor presentor) : base(factory) {
 			this.persistor = persistor;
 			this.presentor = presentor;
-		}
-		public sealed override void SetUp() {
-			if (!persistor.IsPhaseSetup()) {
-				PhaseSetUp();
-				persistor.SetPhaseSetup(true);
-			}
 		}
 	}
 }

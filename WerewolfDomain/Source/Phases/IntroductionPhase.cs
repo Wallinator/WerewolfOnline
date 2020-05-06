@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using WerewolfDomain.Interfaces;
 using WerewolfDomain.Phases.Shared;
+using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Phases {
@@ -15,7 +16,7 @@ namespace WerewolfDomain.Phases {
 		internal override PhaseType PhaseType => PhaseType.Introduction;
 
 		protected override List<Poll> ConstructPolls() {
-			List<Player> players = persistor.GetLivingPlayers();
+			List<Player> players = persistor.GetAllPlayers().FindAll(p => p.Role.Name != RoleName.Spectator);
 			List<Poll> polls = new List<Poll>() {
 				new Poll(players, new List<string> { "Ready" }, PollType.Ready)
 			};

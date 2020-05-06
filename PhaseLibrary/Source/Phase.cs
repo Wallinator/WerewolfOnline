@@ -2,9 +2,15 @@
 using System.Threading;
 namespace PhaseLibrary {
 	public abstract class Phase {
-		private PhaseFactory PhFactory;
-		private bool IsSetup = false;
-		public abstract int DefaultDurationSeconds { get; }
+		protected PhaseFactory PhFactory;
+		private bool isSetup = false;
+
+		protected virtual bool IsSetup {
+			get => isSetup; set => isSetup = value;
+		}
+		public abstract int DefaultDurationSeconds {
+			get;
+		}
 
 
 		protected Phase(PhaseFactory factory) {
@@ -35,7 +41,7 @@ namespace PhaseLibrary {
 		private void Resolve() {
 			PhaseResolve();
 		}
-		protected Phase NextPhase() {
+		protected virtual Phase NextPhase() {
 			return PhFactory.MakeNextPhase(this);
 		}
 

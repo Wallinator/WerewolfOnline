@@ -26,7 +26,7 @@ namespace WerewolfDomainTests.PhaseTests {
 			seer.Role = new Seer();
 			werewolf.Role = new Werewolf();
 			villager.Role = new Villager();
-			mockPersistor.Players = new List<Player>() {
+			mockPersistor.AllPlayers = new List<Player>() {
 				seer,
 				werewolf,
 				villager,
@@ -52,7 +52,7 @@ namespace WerewolfDomainTests.PhaseTests {
 
 			phase.SetUp();
 			Poll poll = mockPersistor.GetPoll(PollType.Werewolf);
-			Assert.IsTrue(poll.Voters.SetEquals(mockPersistor.Players.FindAll(player => player.Role.Name == RoleName.Werewolf)));
+			Assert.IsTrue(poll.Voters.SetEquals(mockPersistor.GetAllPlayers().FindAll(player => player.Role.Name == RoleName.Werewolf)));
 		}
 		[Test]
 		public void WhenPollAddedShouldHaveChoicesNonWerewolves() {
@@ -61,7 +61,9 @@ namespace WerewolfDomainTests.PhaseTests {
 			Poll poll = mockPersistor.GetPoll(PollType.Werewolf);
 			List<string> choicesactual = poll.Choices.ConvertAll(obj => (string) obj);
 			choicesactual.Sort();
-			List<string> choicesexpected = mockPersistor.Players.FindAll(player => player.Role.Name != RoleName.Werewolf).ConvertAll(player => player.Name);
+			List<string> choicesexpected = mockPersistor.AllPlayers	.FindAll(player =>	player.Role.Name != RoleName.Werewolf && 
+																						player.Role.Name != RoleName.Spectator)
+																	.ConvertAll(player => player.Name);
 			choicesexpected.Sort();
 			Assert.IsTrue(choicesactual.SequenceEqual(choicesexpected));
 		}
