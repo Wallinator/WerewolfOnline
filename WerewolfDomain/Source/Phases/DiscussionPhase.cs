@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using WerewolfDomain.Interfaces;
 using WerewolfDomain.Interfaces.Persisters;
 using WerewolfDomain.Phases.Shared;
+using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Phases {
@@ -15,11 +16,18 @@ namespace WerewolfDomain.Phases {
 		internal override PhaseType PhaseType => PhaseType.Discussion;
 
 		protected override List<Poll> ConstructPolls() {
-			throw new System.NotImplementedException();
+			List<Player> players = persistor.GetAllPlayers().FindAll(p => p.Role.Name != RoleName.Spectator);
+			List<Poll> polls = new List<Poll>() {
+				new Poll(players, presentor.GetDiscussionPollOptions(), PollType.Ready)
+			};
+			return polls;
 		}
 
 		protected override List<PollType> PollTypes() {
-			throw new System.NotImplementedException();
+			List<PollType> polltypes = new List<PollType> {
+				PollType.Ready
+			};
+			return polltypes;
 		}
 	}
 }

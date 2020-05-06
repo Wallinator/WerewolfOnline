@@ -21,5 +21,13 @@ namespace WerewolfDomainTests.PhaseTests.Mocks {
 		void Presentor.ShowEvent(GameEvent gameEvent) {
 			visibleEvents.Add(gameEvent);
 		}
+
+		public IEnumerable<string> GetDiscussionPollOptions() {
+			return new List<string> { "Ready To Vote" };
+		}
+
+		public IEnumerable<string> GetIntroductionPollOptions() {
+			return new List<string> { "Ready" };
+		}
 	}
 }

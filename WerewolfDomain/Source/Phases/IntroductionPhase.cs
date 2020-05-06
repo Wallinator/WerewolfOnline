@@ -13,13 +13,12 @@ namespace WerewolfDomain.Phases {
 
 		public override int DefaultDurationSeconds => 0;
 
-
 		internal override PhaseType PhaseType => PhaseType.Introduction;
 
 		protected override List<Poll> ConstructPolls() {
 			List<Player> players = persistor.GetAllPlayers().FindAll(p => p.Role.Name != RoleName.Spectator);
 			List<Poll> polls = new List<Poll>() {
-				new Poll(players, new List<string> { "Ready" }, PollType.Ready)
+				new Poll(players, presentor.GetIntroductionPollOptions(), PollType.Ready)
 			};
 			return polls;
 		}

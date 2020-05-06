@@ -1,4 +1,5 @@
-﻿using WerewolfDomain.Structures;
+﻿using System.Collections.Generic;
+using WerewolfDomain.Structures;
 using WerewolfDomain.Structures.GameEvents;
 
 namespace WerewolfDomain.Interfaces {
@@ -6,5 +7,7 @@ namespace WerewolfDomain.Interfaces {
 		void ShowPoll(Poll poll);
 		void HidePoll(Poll poll);
 		void ShowEvent(GameEvent gameEvent);
+		IEnumerable<string> GetDiscussionPollOptions();
+		IEnumerable<string> GetIntroductionPollOptions();
 	}
 }

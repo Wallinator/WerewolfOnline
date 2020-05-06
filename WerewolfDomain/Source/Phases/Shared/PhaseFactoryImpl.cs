@@ -55,8 +55,8 @@ namespace WerewolfDomain.Phases.Shared {
 				PhaseType.Seer => new SeerPhase(this, persistor, presentor),
 				PhaseType.Story => new StoryPhase(this, persistor, presentor),
 				PhaseType.Discussion => new DiscussionPhase(this, persistor, presentor),
-				PhaseType.Jury => throw new NotImplementedException(),
-				PhaseType.Execution => throw new NotImplementedException(),
+				PhaseType.Jury => new JuryPhase(this, persistor, presentor),
+				PhaseType.Execution => new ExecutionPhase(this, persistor, presentor),
 				PhaseType.Wrapper => new WerewolfPhase(this, persistor, presentor),
 				_ => throw new InvalidPhaseTypeException(),
 			};

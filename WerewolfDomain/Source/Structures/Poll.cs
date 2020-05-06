@@ -93,6 +93,8 @@ namespace WerewolfDomain.Structures {
 		Seer,
 		Ready,
 		Sleep,
-		Storyteller
+		Storyteller,
+		Discussion,
+		Jury
 	}
 }

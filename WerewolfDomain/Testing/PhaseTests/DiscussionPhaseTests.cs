@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using PhaseLibrary;
 using System.Collections.Generic;
 using WerewolfDomain.Phases.Shared;
@@ -7,7 +7,7 @@ using WerewolfDomain.Structures;
 using WerewolfDomainTests.PhaseTests.Mocks;
 
 namespace WerewolfDomainTests.PhaseTests {
-	public class IntroductionPhaseTests {
+	public class DiscussionPhaseTests {
 		private Phase phase;
 		private PersistorMock mockPersister;
 		private PresentorMock mockPresentor;
@@ -19,7 +19,7 @@ namespace WerewolfDomainTests.PhaseTests {
 		public void Setup() {
 			mockPersister = new PersistorMock();
 			mockPresentor = new PresentorMock();
-			phase = new PhaseFactoryImpl(mockPersister, mockPresentor, mockPersister.AllPhasesExist()).ConstructPhase(PhaseType.Introduction);
+			phase = new PhaseFactoryImpl(mockPersister, mockPresentor, mockPersister.AllPhasesExist()).ConstructPhase(PhaseType.Discussion);
 			mockPersister.AllPlayers = new List<Player>() {
 				p1,
 				p2,
@@ -34,7 +34,7 @@ namespace WerewolfDomainTests.PhaseTests {
 			Assert.AreEqual(poll, mockPresentor.PollShown);
 		}
 		[Test]
-		public void WhenPollAddedShouldBeTypeReady() {
+		public void WhenPollAddedShouldBeTypeDiscussion() {
 			phase.SetUp();
 			Poll poll = mockPersister.GetPoll(PollType.Ready);
 			Assert.AreEqual(PollType.Ready, poll.Type);
@@ -49,7 +49,7 @@ namespace WerewolfDomainTests.PhaseTests {
 		public void WhenPollAddedShouldHaveChoicesFromPresentor() {
 			phase.SetUp();
 			Poll poll = mockPersister.GetPoll(PollType.Ready);
-			Assert.AreEqual(mockPresentor.GetIntroductionPollOptions(), poll.Choices);
+			Assert.AreEqual(mockPresentor.GetDiscussionPollOptions(), poll.Choices);
 		}
 
 		[Test]
@@ -68,6 +68,22 @@ namespace WerewolfDomainTests.PhaseTests {
 			Assert.AreNotSame(phase, newPhase);
 		}
 		[Test]
+		public void ShouldRemovePollWhenResolved() {
+			phase.SetUp();
+			Poll poll = mockPersister.GetPoll(PollType.Ready);
+			poll.ClosePoll();
+			phase.StateHasChanged();
+			Assert.AreEqual(0, mockPersister.Polls.Count);
+		}
+
+		[Test]
+		public void GivenPollOpenPhaseShouldForceResolve() {
+			phase.SetUp();
+			Phase newPhase = phase.StateHasChanged();
+			Assert.AreSame(phase, newPhase);
+		}
+
+		[Test]
 		public void WhenPhaseResolvedShouldHidePoll() {
 			phase.SetUp();
 			Poll poll = mockPersister.GetPoll(PollType.Ready);
@@ -76,12 +92,20 @@ namespace WerewolfDomainTests.PhaseTests {
 			Assert.AreEqual(poll, mockPresentor.PollHidden);
 		}
 		[Test]
-		public void ShouldRemovePollWhenResolved() {
+		public void WhenPhaseForceResolvedShouldHidePoll() {
+			phase.SetUp();
+			Poll poll = mockPersister.GetPoll(PollType.Ready);
+			phase.ForceResolve();
+			Assert.AreEqual(poll, mockPresentor.PollHidden);
+		}
+
+		[Test]
+		public void GivenPollClosedPhaseShouldForceResolve() {
 			phase.SetUp();
 			Poll poll = mockPersister.GetPoll(PollType.Ready);
 			poll.ClosePoll();
-			phase.StateHasChanged();
-			Assert.AreEqual(0, mockPersister.Polls.Count);
+			Phase newPhase = phase.ForceResolve();
+			Assert.AreNotSame(phase, newPhase);
 		}
 	}
 }
