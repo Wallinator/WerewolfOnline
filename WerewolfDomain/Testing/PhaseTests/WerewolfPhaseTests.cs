@@ -12,21 +12,21 @@ namespace WerewolfDomainTests.PhaseTests {
 
 
 		private Phase phase;
-		private PersistorMock mockPersistor;
-		private PresentorMock mockPresentor;
+		private PersistorMock mockPersister;
+		private PresentorMock mockPresenter;
 		private readonly Player seer = new Player("1", "abby");
 		private readonly Player werewolf = new Player("2", "bob");
 		private readonly Player villager = new Player("3", "claire");
 
 		[SetUp]
 		public void Setup() {
-			mockPersistor = new PersistorMock();
-			mockPresentor = new PresentorMock();
-			phase = new PhaseFactoryImpl(mockPersistor, mockPresentor, mockPersistor.AllPhasesExist()).ConstructPhase(PhaseType.Werewolf);
+			mockPersister = new PersistorMock();
+			mockPresenter = new PresentorMock();
+			phase = new PhaseFactoryImpl(mockPersister, mockPresenter, mockPersister.AllPhasesExist()).ConstructPhase(PhaseType.Werewolf);
 			seer.Role = new Seer();
 			werewolf.Role = new Werewolf();
 			villager.Role = new Villager();
-			mockPersistor.AllPlayers = new List<Player>() {
+			mockPersister.AllPlayers = new List<Player>() {
 				seer,
 				werewolf,
 				villager,
@@ -36,32 +36,32 @@ namespace WerewolfDomainTests.PhaseTests {
 		[Test]
 		public void WhenPollAddedShouldBePresented() {
 			phase.SetUp();
-			Poll poll = mockPersistor.GetPoll(PollType.Werewolf);
-			Assert.AreEqual(poll, mockPresentor.PollShown);
+			Poll poll = mockPersister.GetPoll(PollType.Werewolf);
+			Assert.AreEqual(poll, mockPresenter.PollShown);
 		}
 
 		[Test]
 		public void WhenPollAddedShouldBeTypeWerewolf() {
 
 			phase.SetUp();
-			Poll poll = mockPersistor.GetPoll(PollType.Werewolf);
+			Poll poll = mockPersister.GetPoll(PollType.Werewolf);
 			Assert.AreEqual(PollType.Werewolf, poll.Type);
 		}
 		[Test]
 		public void WhenPollAddedShouldBeForWerewolves() {
 
 			phase.SetUp();
-			Poll poll = mockPersistor.GetPoll(PollType.Werewolf);
-			Assert.IsTrue(poll.Voters.SetEquals(mockPersistor.GetAllPlayers().FindAll(player => player.Role.Name == RoleName.Werewolf)));
+			Poll poll = mockPersister.GetPoll(PollType.Werewolf);
+			Assert.IsTrue(poll.Voters.SetEquals(mockPersister.GetAllPlayers().FindAll(player => player.Role.Name == RoleName.Werewolf)));
 		}
 		[Test]
 		public void WhenPollAddedShouldHaveChoicesNonWerewolves() {
 
 			phase.SetUp();
-			Poll poll = mockPersistor.GetPoll(PollType.Werewolf);
+			Poll poll = mockPersister.GetPoll(PollType.Werewolf);
 			List<string> choicesactual = poll.Choices.ConvertAll(obj => (string) obj);
 			choicesactual.Sort();
-			List<string> choicesexpected = mockPersistor.AllPlayers	.FindAll(player =>	player.Role.Name != RoleName.Werewolf && 
+			List<string> choicesexpected = mockPersister.AllPlayers	.FindAll(player =>	player.Role.Name != RoleName.Werewolf && 
 																						player.Role.Name != RoleName.Spectator)
 																	.ConvertAll(player => player.Name);
 			choicesexpected.Sort();
@@ -78,7 +78,7 @@ namespace WerewolfDomainTests.PhaseTests {
 		[Test]
 		public void GivenPollClosedPhaseShouldResolve() {
 			phase.SetUp();
-			Poll poll = mockPersistor.GetPoll(PollType.Werewolf);
+			Poll poll = mockPersister.GetPoll(PollType.Werewolf);
 			poll.ClosePoll();
 			Phase newPhase = phase.StateHasChanged();
 			Assert.AreNotSame(phase, newPhase);
@@ -86,17 +86,33 @@ namespace WerewolfDomainTests.PhaseTests {
 		[Test]
 		public void GivenPhaseResolvedPollShouldNotBeRemoved() {
 			phase.SetUp();
-			Poll poll = mockPersistor.GetPoll(PollType.Werewolf);
+			Poll poll = mockPersister.GetPoll(PollType.Werewolf);
 			poll.ClosePoll();
 			phase.StateHasChanged();
-			Assert.AreEqual(poll, mockPersistor.GetPoll(PollType.Werewolf));
+			Assert.AreEqual(poll, mockPersister.GetPoll(PollType.Werewolf));
 		}
 		[Test]
 		public void GivenPhaseForceResolvedPollShouldBeClosed() {
 			phase.SetUp();
 			phase.ForceResolve();
-			Poll poll = mockPersistor.GetPoll(PollType.Werewolf);
+			Poll poll = mockPersister.GetPoll(PollType.Werewolf);
 			Assert.IsTrue(poll.Closed);
+		}
+		[Test]
+		public void WhenPhaseResolvedShouldHidePoll() {
+			phase.SetUp();
+			Poll poll = mockPersister.GetPoll(PollType.Werewolf);
+			poll.ClosePoll();
+			phase.StateHasChanged();
+			Assert.IsTrue(mockPresenter.PollHidden);
+		}
+		[Test]
+		public void WhenPhaseForceResolvedShouldHidePoll() {
+			phase.SetUp();
+			Poll poll = mockPersister.GetPoll(PollType.Werewolf);
+			poll.ClosePoll();
+			phase.ForceResolve();
+			Assert.IsTrue(mockPresenter.PollHidden);
 		}
 	}
 }

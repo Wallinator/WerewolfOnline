@@ -6,13 +6,14 @@ using WerewolfDomain.Structures.GameEvents;
 namespace WerewolfDomainTests.PhaseTests.Mocks {
 	internal class PresentorMock : Presentor {
 
-		public Poll PollHidden { get; set; } = null;
-		void Presentor.HidePoll(Poll poll) {
-			PollHidden = poll;
+		public bool PollHidden { get; set; } = false;
+		void Presentor.HidePoll() {
+			PollHidden = true;
 		}
 
 		public Poll PollShown { get; set; } = null;
 		void Presentor.ShowPoll(Poll poll) {
+			PollHidden = false;
 			PollShown = poll;
 		}
 

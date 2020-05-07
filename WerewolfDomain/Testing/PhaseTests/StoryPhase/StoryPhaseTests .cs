@@ -12,71 +12,103 @@ namespace WerewolfDomainTests.PhaseTests.StoryPhase {
 
 
 		private Phase phase;
-		private PersistorMock mockPersistor;
-		private PresentorMock mockPresentor;
+		private PersistorMock mockPersister;
+		private PresentorMock mockPresenter;
 		private readonly Player storyteller = new Player("3", "claire");
 		PhaseFactoryImpl factory;
 
 
 		[SetUp]
 		public void Setup() {
-			mockPersistor = new PersistorMock();
-			mockPresentor = new PresentorMock();
-			factory = new PhaseFactoryImpl(mockPersistor, mockPresentor, mockPersistor.AllPhasesExist());
+			mockPersister = new PersistorMock();
+			mockPresenter = new PresentorMock();
+			factory = new PhaseFactoryImpl(mockPersister, mockPresenter, mockPersister.AllPhasesExist());
 			phase = factory.ConstructPhase(PhaseType.Story);
 			storyteller.IsStoryteller = true;
 			List<Player> players = new List<Player>() {
 					storyteller
 				};
-			mockPersistor.AllPlayers = players;
+			mockPersister.AllPlayers = players;
 		}
 
 		[Test]
 		public void WhenPollAddedShouldBePresented() {
 			phase.SetUp();
-			Poll poll = mockPersistor.GetPoll(PollType.Storyteller);
-			Assert.AreEqual(poll, mockPresentor.PollShown);
+			Poll poll = mockPersister.GetPoll(PollType.Storyteller);
+			Assert.AreEqual(poll, mockPresenter.PollShown);
 		}
 		[Test]
 		public void PollAddedShouldBeTypeStoryteller() {
 			phase.SetUp();
-			Poll poll = mockPersistor.GetPoll(PollType.Storyteller);
+			Poll poll = mockPersister.GetPoll(PollType.Storyteller);
 			Assert.AreEqual(PollType.Storyteller, poll.Type);
 		}
 		[Test]
 		public void PollAddedShouldBeForStoryteller() {
 			phase.SetUp();
-			Poll poll = mockPersistor.GetPoll(PollType.Storyteller);
-			Assert.IsTrue(poll.Voters.SetEquals(mockPersistor.GetAllPlayers().FindAll(x => x.IsStoryteller)));
+			Poll poll = mockPersister.GetPoll(PollType.Storyteller);
+			Assert.IsTrue(poll.Voters.SetEquals(mockPersister.GetAllPlayers().FindAll(x => x.IsStoryteller)));
 		}
 		[Test, Combinatorial]
 		public void PollAddedShouldHaveChoicesPollsToResolve([Values] bool werewolf) {
+
 			if (!werewolf) {
 				return;
 			}
+
 			AddPollsToMockPersistor(PollsForStoryPhase(werewolf));
 			phase.SetUp();
-			Poll poll = mockPersistor.GetPoll(PollType.Storyteller);
+			Poll poll = mockPersister.GetPoll(PollType.Storyteller);
+
+
 			List<PollType> choicesactual = poll.Choices.ConvertAll(obj => (PollType) obj);
 			choicesactual.Sort();
 			List<PollType> choicesexpected = PollsForStoryPhase(werewolf).ConvertAll(p => p.Type);
 			choicesexpected.Sort();
 			Assert.IsTrue(choicesactual.SequenceEqual(choicesexpected));
 		}
-
 		private void AddPollsToMockPersistor(List<Poll> list) {
 			for (int i = 0; i < list.Count; i++) {
 				Poll p = list[i];
-				mockPersistor.AddPoll(p);
+				mockPersister.AddPoll(p);
 			}
 		}
 
 		private List<Poll> PollsForStoryPhase(bool werewolf) {
 			List<Poll> list = new List<Poll>();
 			if (werewolf) {
-				list.Add(new Poll(new List<Player>(), new object[0], PollType.Werewolf));
+				list.Add(ConstructPoll(PollType.Werewolf));
 			}
 			return list;
+		}
+
+		private static Poll ConstructPoll(PollType type) {
+			return type switch
+			{
+				PollType.Werewolf => new Poll(new List<Player>(), new object[0], PollType.Werewolf),
+				_ => throw new System.NotImplementedException()
+			};
+		}
+
+		[Test, Combinatorial]
+		public void ShouldResolveWhenLastPoll([Values(PollType.Werewolf)] PollType type) {
+
+			mockPersister.AddPoll(ConstructPoll(type));
+			phase.SetUp();
+			Poll poll = mockPersister.GetPoll(PollType.Storyteller);
+			poll.PlaceVote(storyteller, type);
+			Phase newPhase = phase.StateHasChanged();
+			Assert.AreNotSame(phase, newPhase);
+		}
+		[Test, Combinatorial]
+		public void ShouldHidePollWhenResolved([Values(PollType.Werewolf)] PollType type) {
+
+			mockPersister.AddPoll(ConstructPoll(type));
+			phase.SetUp();
+			Poll poll = mockPersister.GetPoll(PollType.Storyteller);
+			poll.PlaceVote(storyteller, type);
+			phase.StateHasChanged();
+			Assert.IsTrue(mockPresenter.PollHidden);
 		}
 	}
 }

@@ -35,7 +35,6 @@ namespace WerewolfDomain.Helpers {
 		}
 		private static void ResolveReady(Poll poll, Persister persistor, Presentor presentor) {
 			persistor.RemovePoll(poll.Type);
-			presentor.HidePoll(poll);
 			return;
 		}
 		private static void ResolveWerewolf(Poll poll, Persister persistor, Presentor presentor) {
@@ -67,7 +66,6 @@ namespace WerewolfDomain.Helpers {
 				}
 			}
 			persistor.RemovePoll(poll.Type);
-			presentor.HidePoll(poll);
 		}
 
 		private static void ResolveSleep(Poll poll, Persister persistor, Presentor presentor) {
@@ -75,7 +73,6 @@ namespace WerewolfDomain.Helpers {
 		}
 		private static void ResolveStory(Poll poll, Persister persistor, Presentor presentor) {
 			persistor.RemovePoll(poll.Type);
-			presentor.HidePoll(poll);
 			Poll chosenPoll = persistor.GetPoll((PollType) poll.Winners().First());
 			Resolve(chosenPoll, persistor, presentor);
 		}

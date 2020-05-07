@@ -10,7 +10,7 @@ namespace WerewolfDomainTests.PhaseTests {
 	public class DiscussionPhaseTests {
 		private Phase phase;
 		private PersistorMock mockPersister;
-		private PresentorMock mockPresentor;
+		private PresentorMock mockPresenter;
 		private readonly Player p1 = new Player("1", "abby");
 		private readonly Player p2 = new Player("2", "bob");
 		private readonly Player p3 = new Player("3", "claire");
@@ -18,8 +18,8 @@ namespace WerewolfDomainTests.PhaseTests {
 		[SetUp]
 		public void Setup() {
 			mockPersister = new PersistorMock();
-			mockPresentor = new PresentorMock();
-			phase = new PhaseFactoryImpl(mockPersister, mockPresentor, mockPersister.AllPhasesExist()).ConstructPhase(PhaseType.Discussion);
+			mockPresenter = new PresentorMock();
+			phase = new PhaseFactoryImpl(mockPersister, mockPresenter, mockPersister.AllPhasesExist()).ConstructPhase(PhaseType.Discussion);
 			mockPersister.AllPlayers = new List<Player>() {
 				p1,
 				p2,
@@ -31,7 +31,7 @@ namespace WerewolfDomainTests.PhaseTests {
 		public void WhenPollAddedShouldBePresented() {
 			phase.SetUp();
 			Poll poll = mockPersister.GetPoll(PollType.Ready);
-			Assert.AreEqual(poll, mockPresentor.PollShown);
+			Assert.AreEqual(poll, mockPresenter.PollShown);
 		}
 		[Test]
 		public void WhenPollAddedShouldBeTypeDiscussion() {
@@ -49,7 +49,7 @@ namespace WerewolfDomainTests.PhaseTests {
 		public void WhenPollAddedShouldHaveChoicesFromPresentor() {
 			phase.SetUp();
 			Poll poll = mockPersister.GetPoll(PollType.Ready);
-			Assert.AreEqual(mockPresentor.GetDiscussionPollOptions(), poll.Choices);
+			Assert.AreEqual(mockPresenter.GetDiscussionPollOptions(), poll.Choices);
 		}
 
 		[Test]
@@ -89,14 +89,13 @@ namespace WerewolfDomainTests.PhaseTests {
 			Poll poll = mockPersister.GetPoll(PollType.Ready);
 			poll.ClosePoll();
 			phase.StateHasChanged();
-			Assert.AreEqual(poll, mockPresentor.PollHidden);
+			Assert.IsTrue(mockPresenter.PollHidden);
 		}
 		[Test]
 		public void WhenPhaseForceResolvedShouldHidePoll() {
 			phase.SetUp();
-			Poll poll = mockPersister.GetPoll(PollType.Ready);
 			phase.ForceResolve();
-			Assert.AreEqual(poll, mockPresentor.PollHidden);
+			Assert.IsTrue(mockPresenter.PollHidden);
 		}
 
 		[Test]

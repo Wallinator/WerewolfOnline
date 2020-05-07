@@ -35,11 +35,15 @@ namespace WerewolfDomain.Phases.Shared {
 				presentor.ShowPoll(poll);
 			});
 		}
-
+		protected override void CleanUp() {
+			presentor.HidePoll();
+		}
 		protected abstract List<Poll> ConstructPolls();
 
 		protected override void PreForceResolve() {
-			GetMyPolls().ForEach(poll => poll.ClosePoll());
+			GetMyPolls().ForEach(poll => { 
+				poll.ClosePoll();
+			});
 		}
 	}
 }

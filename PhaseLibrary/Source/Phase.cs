@@ -42,9 +42,11 @@ namespace PhaseLibrary {
 			PhaseResolve();
 		}
 		protected virtual Phase NextPhase() {
+			CleanUp();
 			return PhFactory.MakeNextPhase(this);
 		}
-
+		protected virtual void CleanUp() {
+		}
 		protected abstract void PhaseSetUp();
 		protected abstract bool CanResolve();
 		protected abstract void PhaseResolve();
