@@ -15,6 +15,7 @@ namespace WerewolfDomain.Structures.GameEvents {
 	}
 	public enum EventType {
 		WerewolfKill,
-		SeerReveal
+		SeerReveal,
+		JuryExecution
 	}
 }

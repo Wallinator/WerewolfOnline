@@ -14,9 +14,16 @@ namespace WerewolfDomain.Helpers {
 			GameEvent gameEvent = method switch
 			{
 				EventType.WerewolfKill => MakeWerewolfKillEvent(player, persistor),
+				EventType.SeerReveal => throw new NotImplementedException(),
+				EventType.JuryExecution => MakeJuryExecutionEvent(player, persistor),
 				_ => throw new NotImplementedException()
 			};
 			presentor.ShowEvent(gameEvent);
+		}
+
+		private static GameEvent MakeJuryExecutionEvent(Player player, Persister persistor) {
+			player.Role = new Spectator(player.Role);
+			return new JuryExecutionEvent(persistor.GetAllPlayers(), player.Name);
 		}
 
 		private static GameEvent MakeWerewolfKillEvent(Player player, Persister persistor) {

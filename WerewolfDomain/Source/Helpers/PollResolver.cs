@@ -30,10 +30,15 @@ namespace WerewolfDomain.Helpers {
 				case PollType.Storyteller:
 					ResolveStory(poll, persistor, presentor);
 					break;
+				case PollType.Jury:
+					ResolveJury(poll, persistor, presentor);
+					break;
 				default:
 					throw new InvalidPollTypeException();
 			}
 		}
+
+
 		private static void ResolveReady(Poll poll, Persister persistor, Presentor presentor) {
 			persistor.RemovePoll(poll.Type);
 			return;
@@ -49,6 +54,19 @@ namespace WerewolfDomain.Helpers {
 			string chosenName = poll.Winners().First().ToString();
 			Player chosen = players.Find(x => x.Name.Equals(chosenName));
 			PlayerKiller.Kill(chosen, EventType.WerewolfKill, persistor, presentor);
+		}
+
+		private static void ResolveJury(Poll poll, Persister persistor, Presentor presentor) {
+			List<Player> players = persistor.GetAllPlayers();
+			persistor.RemovePoll(poll.Type);
+			if (poll.Winners().Count != 1) {
+				JuryExecutionEvent gameEvent = new JuryExecutionEvent(players, null);
+				presentor.ShowEvent(gameEvent);
+				return;
+			}
+			string chosenName = poll.Winners().First().ToString();
+			Player chosen = players.Find(x => x.Name.Equals(chosenName));
+			PlayerKiller.Kill(chosen, EventType.JuryExecution, persistor, presentor);
 		}
 
 		private static void ResolveVillager(Poll poll, Persister persistor, Presentor presentor) {

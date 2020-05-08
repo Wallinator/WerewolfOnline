@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using WerewolfDomain.Interfaces;
 using WerewolfDomain.Interfaces.Persisters;
 using WerewolfDomain.Phases.Shared;
+using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Phases {
@@ -10,16 +11,25 @@ namespace WerewolfDomain.Phases {
 		public JuryPhase(PhaseFactory factory, Persister persistor, Presentor presentor) : base(factory, persistor, presentor) {
 		}
 
-		public override int DefaultDurationSeconds => throw new System.NotImplementedException();
+		public override int DefaultDurationSeconds => 30;
 
-		internal override PhaseType PhaseType => throw new System.NotImplementedException();
+		internal override PhaseType PhaseType => PhaseType.Werewolf;
 
-		protected override List<Poll> ConstructPolls() {
-			throw new System.NotImplementedException();
-		}
 
 		protected override List<PollType> PollTypes() {
-			throw new System.NotImplementedException();
+			List<PollType> polltypes = new List<PollType> {
+				PollType.Jury
+			};
+			return polltypes;
 		}
+
+		protected override List<Poll> ConstructPolls() {
+			List<Player> livingPlayers = persistor.GetAllPlayers().FindAll(player => player.Role.Name != RoleName.Spectator);
+			List<Poll> polls = new List<Poll>() {
+				new Poll(livingPlayers, livingPlayers.ConvertAll(player => player.Name), PollType.Jury)
+			};
+			return polls;
+		}
+
 	}
 }

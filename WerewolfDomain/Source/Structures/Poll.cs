@@ -70,20 +70,24 @@ namespace WerewolfDomain.Structures {
 			Closed = true;
 		}
 
+		private List<object> winners = null;
 		public List<object> Winners() {
-			List<object> Winners = new List<object>();
-			int highestNum = 0;
-			foreach (object choice in Results.Keys) {
-				if (Results[choice] > highestNum) {
-					Winners.Clear();
-					Winners.Add(choice);
-					highestNum = Results[choice];
+			if (winners == null) {
+				List<object> Winners = new List<object>();
+				int highestNum = 0;
+				foreach (object choice in Results.Keys) {
+					if (Results[choice] > highestNum) {
+						Winners.Clear();
+						Winners.Add(choice);
+						highestNum = Results[choice];
+					}
+					else if (Results[choice] == highestNum) {
+						Winners.Add(choice);
+					}
 				}
-				else if (Results[choice] == highestNum) {
-					Winners.Add(choice);
-				}
+				winners = Winners;
 			}
-			return Winners;
+			return winners;
 		}
 
 	}
