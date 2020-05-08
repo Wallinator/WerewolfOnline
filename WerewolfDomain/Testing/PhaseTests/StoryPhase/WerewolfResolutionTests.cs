@@ -7,47 +7,24 @@ using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
 using WerewolfDomain.Structures.GameEvents;
 using WerewolfDomainTests.PhaseTests.Mocks;
+using WerewolfDomainTests.PhaseTests.Shared;
 
 namespace WerewolfDomainTests.PhaseTests.StoryPhase {
-	public class WerewolfResolutionTests {
-		private Phase phase;
-		private PersistorMock mockPersistor;
-		private PresentorMock mockPresentor;
-		private readonly Player seer = new Player("1", "abby");
-		private readonly Player werewolf1 = new Player("2", "bob");
-		private readonly Player werewolf2 = new Player("3", "claire");
-		private readonly Player villager = new Player("4", "debra");
-		private Poll werewolfpoll;
-		PhaseFactoryImpl factory;
+	internal class WerewolfResolutionTests : PhaseSetup {
 
+		private Poll werewolfpoll;
 
 		[SetUp]
 		public void Setup() {
-			mockPersistor = new PersistorMock();
-			mockPresentor = new PresentorMock();
-			seer.Role = new Seer();
-			werewolf1.Role = new Werewolf();
-			werewolf2.Role = new Werewolf();
-			villager.Role = new Villager();
-			villager.IsStoryteller = true;
-			List<Player> players = new List<Player>() {
-					seer,
-					werewolf1,
-					werewolf2,
-					villager
-				};
-			mockPersistor.AllPlayers = players;
-
-			factory = new PhaseFactoryImpl(mockPersistor, mockPresentor, mockPersistor.AllPhasesExist());
 
 			phase = factory.ConstructPhase(PhaseType.Werewolf);
 			phase.SetUp();
-			mockPersistor.PhaseSetup = false;
-			werewolfpoll = mockPersistor.GetPoll(PollType.Werewolf);
+			mockPersister.PhaseSetup = false;
+			werewolfpoll = mockPersister.GetPoll(PollType.Werewolf);
 
 			phase = factory.ConstructPhase(PhaseType.Story);
 			phase.SetUp();
-			Poll storypoll = mockPersistor.GetPoll(PollType.Storyteller);
+			Poll storypoll = mockPersister.GetPoll(PollType.Storyteller);
 			storypoll.PlaceVote(villager, PollType.Werewolf);
 		}
 
@@ -60,18 +37,18 @@ namespace WerewolfDomainTests.PhaseTests.StoryPhase {
 		[Test]
 		public void WhenWerewolfPollHasNoVotesShouldRemovePoll() {
 			phase.StateHasChanged();
-			Assert.IsFalse(mockPersistor.Polls.Exists(p => p.Type == PollType.Werewolf));
+			Assert.IsFalse(mockPersister.Polls.Exists(p => p.Type == PollType.Werewolf));
 		}
 		[Test]
 		public void WhenWerewolfPollHasNoVotesShouldPresentNoKill() {
 			phase.StateHasChanged();
-			WerewolfKillEvent gameEvent = (WerewolfKillEvent) mockPresentor.visibleEvents.Find(e => e.Type == EventType.WerewolfKill);
+			WerewolfKillEvent gameEvent = (WerewolfKillEvent) mockPresenter.visibleEvents.Find(e => e.Type == EventType.WerewolfKill);
 			Assert.IsNull(gameEvent.VictimName);
 		}
 		[Test]
 		public void WhenWerewolfPollHasNoVotesShouldNotKill() {
 			phase.StateHasChanged();
-			Assert.IsTrue(mockPersistor.GetAllPlayers().TrueForAll(p => p.Role.Name != RoleName.Spectator));
+			Assert.IsTrue(mockPersister.GetAllPlayers().TrueForAll(p => p.Role.Name != RoleName.Spectator));
 		}
 
 
@@ -87,14 +64,14 @@ namespace WerewolfDomainTests.PhaseTests.StoryPhase {
 			werewolfpoll.PlaceVote(werewolf1, villager.Name);
 			werewolfpoll.PlaceVote(werewolf2, seer.Name);
 			phase.StateHasChanged();
-			Assert.IsFalse(mockPersistor.Polls.Exists(p => p.Type == PollType.Werewolf));
+			Assert.IsFalse(mockPersister.Polls.Exists(p => p.Type == PollType.Werewolf));
 		}
 		[Test]
 		public void WhenWerewolfPollHasTiedVotesShouldPresentNoKill() {
 			werewolfpoll.PlaceVote(werewolf1, villager.Name);
 			werewolfpoll.PlaceVote(werewolf2, seer.Name);
 			phase.StateHasChanged();
-			WerewolfKillEvent gameEvent = (WerewolfKillEvent) mockPresentor.visibleEvents.Find(e => e.Type == EventType.WerewolfKill);
+			WerewolfKillEvent gameEvent = (WerewolfKillEvent) mockPresenter.visibleEvents.Find(e => e.Type == EventType.WerewolfKill);
 			Assert.IsNull(gameEvent.VictimName);
 		}
 		[Test]
@@ -102,7 +79,7 @@ namespace WerewolfDomainTests.PhaseTests.StoryPhase {
 			werewolfpoll.PlaceVote(werewolf1, villager.Name);
 			werewolfpoll.PlaceVote(werewolf2, seer.Name);
 			phase.StateHasChanged();
-			Assert.IsTrue(mockPersistor.GetAllPlayers().TrueForAll(p => p.Role.Name != RoleName.Spectator));
+			Assert.IsTrue(mockPersister.GetAllPlayers().TrueForAll(p => p.Role.Name != RoleName.Spectator));
 		}
 
 
@@ -118,7 +95,7 @@ namespace WerewolfDomainTests.PhaseTests.StoryPhase {
 			werewolfpoll.PlaceVote(werewolf1, villager.Name);
 			werewolfpoll.PlaceVote(werewolf2, villager.Name);
 			phase.StateHasChanged();
-			Assert.IsFalse(mockPersistor.Polls.Exists(p => p.Type == PollType.Werewolf));
+			Assert.IsFalse(mockPersister.Polls.Exists(p => p.Type == PollType.Werewolf));
 		}
 		[Test]
 		public void WhenWerewolfPollHasValidVictimShouldKill() {
@@ -132,7 +109,7 @@ namespace WerewolfDomainTests.PhaseTests.StoryPhase {
 			werewolfpoll.PlaceVote(werewolf1, villager.Name);
 			werewolfpoll.PlaceVote(werewolf2, villager.Name);
 			phase.StateHasChanged();
-			WerewolfKillEvent gameEvent = mockPresentor.visibleEvents.Find(e => e.Type == EventType.WerewolfKill) as WerewolfKillEvent;
+			WerewolfKillEvent gameEvent = mockPresenter.visibleEvents.Find(e => e.Type == EventType.WerewolfKill) as WerewolfKillEvent;
 			Assert.AreEqual(villager.Name, gameEvent.VictimName);
 		}
 	}

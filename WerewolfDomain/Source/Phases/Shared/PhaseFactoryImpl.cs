@@ -56,7 +56,7 @@ namespace WerewolfDomain.Phases.Shared {
 				PhaseType.Story => new StoryPhase(this, persistor, presentor),
 				PhaseType.Discussion => new DiscussionPhase(this, persistor, presentor),
 				PhaseType.Jury => new JuryPhase(this, persistor, presentor),
-				PhaseType.Execution => new ExecutionPhase(this, persistor, presentor),
+				PhaseType.Bedtime => new BedtimePhase(this, persistor, presentor),
 				PhaseType.Wrapper => new WerewolfPhase(this, persistor, presentor),
 				_ => throw new InvalidPhaseTypeException(),
 			};
@@ -70,7 +70,7 @@ namespace WerewolfDomain.Phases.Shared {
 		Story,
 		Discussion,
 		Jury,
-		Execution,
+		Bedtime,
 		Wrapper
 		//wrapper must be on bottom of ordered phases
 

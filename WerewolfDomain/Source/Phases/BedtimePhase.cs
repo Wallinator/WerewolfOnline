@@ -5,8 +5,8 @@ using WerewolfDomain.Interfaces.Persisters;
 using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Phases.Shared {
-	internal class ExecutionPhase : PollPhase {
-		public ExecutionPhase(PhaseFactory factory, Persister persistor, Presentor presentor) : base(factory, persistor, presentor) {
+	internal class BedtimePhase : PollPhase {
+		public BedtimePhase(PhaseFactory factory, Persister persistor, Presentor presentor) : base(factory, persistor, presentor) {
 		}
 
 		public override int DefaultDurationSeconds => throw new System.NotImplementedException();

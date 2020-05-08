@@ -1,87 +1,18 @@
 using NUnit.Framework;
 using PhaseLibrary;
-using System.Collections.Generic;
 using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
 using WerewolfDomainTests.PhaseTests.Mocks;
+using WerewolfDomainTests.PhaseTests.Shared;
 
 namespace WerewolfDomainTests.PhaseTests {
-	public class IntroductionPhaseTests {
-		private Phase phase;
-		private PersistorMock mockPersister;
-		private PresentorMock mockPresenter;
-		private readonly Player p1 = new Player("1", "abby");
-		private readonly Player p2 = new Player("2", "bob");
-		private readonly Player p3 = new Player("3", "claire");
+	internal class IntroductionPhaseTests : PollPhaseTests {
 
-		[SetUp]
-		public void Setup() {
-			mockPersister = new PersistorMock();
-			mockPresenter = new PresentorMock();
-			phase = new PhaseFactoryImpl(mockPersister, mockPresenter, mockPersister.AllPhasesExist()).ConstructPhase(PhaseType.Introduction);
-			mockPersister.AllPlayers = new List<Player>() {
-				p1,
-				p2,
-				p3,
-			};
-		}
+		protected override PhaseType PhaseType => PhaseType.Introduction;
 
-		[Test]
-		public void WhenPollAddedShouldBePresented() {
-			phase.SetUp();
-			Poll poll = mockPersister.GetPoll(PollType.Ready);
-			Assert.AreEqual(poll, mockPresenter.PollShown);
-		}
-		[Test]
-		public void WhenPollAddedShouldBeTypeReady() {
-			phase.SetUp();
-			Poll poll = mockPersister.GetPoll(PollType.Ready);
-			Assert.AreEqual(PollType.Ready, poll.Type);
-		}
-		[Test]
-		public void WhenPollAddedShouldBeForAllLivingPlayers() {
-			phase.SetUp();
-			Poll poll = mockPersister.GetPoll(PollType.Ready);
-			Assert.IsTrue(poll.Voters.SetEquals(mockPersister.AllPlayers.FindAll(x => x.Role.Name != RoleName.Spectator)));
-		}
-		[Test]
-		public void WhenPollAddedShouldHaveChoicesFromPresentor() {
-			phase.SetUp();
-			Poll poll = mockPersister.GetPoll(PollType.Ready);
-			Assert.AreEqual(mockPresenter.GetIntroductionPollOptions(), poll.Choices);
-		}
-
-		[Test]
-		public void GivenPollOpenPhaseShouldNotResolve() {
-			phase.SetUp();
-			Phase newPhase = phase.StateHasChanged();
-			Assert.AreSame(phase, newPhase);
-		}
-
-		[Test]
-		public void GivenPollClosedPhaseShouldResolve() {
-			phase.SetUp();
-			Poll poll = mockPersister.GetPoll(PollType.Ready);
-			poll.ClosePoll();
-			Phase newPhase = phase.StateHasChanged();
-			Assert.AreNotSame(phase, newPhase);
-		}
-		[Test]
-		public void WhenPhaseResolvedShouldHidePoll() {
-			phase.SetUp();
-			Poll poll = mockPersister.GetPoll(PollType.Ready);
-			poll.ClosePoll();
-			phase.StateHasChanged();
-			Assert.IsTrue(mockPresenter.PollHidden);
-		}
-		[Test]
-		public void ShouldRemovePollWhenResolved() {
-			phase.SetUp();
-			Poll poll = mockPersister.GetPoll(PollType.Ready);
-			poll.ClosePoll();
-			phase.StateHasChanged();
-			Assert.AreEqual(0, mockPersister.Polls.Count);
-		}
+		protected override Poll SamplePoll => new Poll(	mockPersister.GetAllPlayers().FindAll(p => p.Role.Name!= RoleName.Spectator),
+														mockPresenter.GetIntroductionPollOptions(),
+														PollType.Ready);
 	}
 }

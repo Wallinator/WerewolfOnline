@@ -94,7 +94,6 @@ namespace WerewolfDomain.Structures {
 		Ready,
 		Sleep,
 		Storyteller,
-		Discussion,
 		Jury
 	}
 }

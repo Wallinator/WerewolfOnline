@@ -5,50 +5,23 @@ using System.Linq;
 using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Structures;
 using WerewolfDomainTests.PhaseTests.Mocks;
+using WerewolfDomainTests.PhaseTests.Shared;
 
 namespace WerewolfDomainTests.PhaseTests.StoryPhase {
-	public class StoryPhaseTests {
+	internal class StoryPhaseTests : PollPhaseTests {
 		public static List<PollType> PollsResolvedByStoryPhase = new List<PollType> { PollType.Werewolf };
 
+		private Player storyteller;
 
-		private Phase phase;
-		private PersistorMock mockPersister;
-		private PresentorMock mockPresenter;
-		private readonly Player storyteller = new Player("3", "claire");
-		PhaseFactoryImpl factory;
+		protected override Poll SamplePoll => new Poll(mockPersister.GetAllPlayers().FindAll(p => p.IsStoryteller), new object[0], PollType.Storyteller);
 
+		protected override PhaseType PhaseType => PhaseType.Story;
 
 		[SetUp]
 		public void Setup() {
-			mockPersister = new PersistorMock();
-			mockPresenter = new PresentorMock();
-			factory = new PhaseFactoryImpl(mockPersister, mockPresenter, mockPersister.AllPhasesExist());
-			phase = factory.ConstructPhase(PhaseType.Story);
-			storyteller.IsStoryteller = true;
-			List<Player> players = new List<Player>() {
-					storyteller
-				};
-			mockPersister.AllPlayers = players;
+			storyteller = villager;
 		}
 
-		[Test]
-		public void WhenPollAddedShouldBePresented() {
-			phase.SetUp();
-			Poll poll = mockPersister.GetPoll(PollType.Storyteller);
-			Assert.AreEqual(poll, mockPresenter.PollShown);
-		}
-		[Test]
-		public void PollAddedShouldBeTypeStoryteller() {
-			phase.SetUp();
-			Poll poll = mockPersister.GetPoll(PollType.Storyteller);
-			Assert.AreEqual(PollType.Storyteller, poll.Type);
-		}
-		[Test]
-		public void PollAddedShouldBeForStoryteller() {
-			phase.SetUp();
-			Poll poll = mockPersister.GetPoll(PollType.Storyteller);
-			Assert.IsTrue(poll.Voters.SetEquals(mockPersister.GetAllPlayers().FindAll(x => x.IsStoryteller)));
-		}
 		[Test, Combinatorial]
 		public void PollAddedShouldHaveChoicesPollsToResolve([Values] bool werewolf) {
 
@@ -67,6 +40,7 @@ namespace WerewolfDomainTests.PhaseTests.StoryPhase {
 			choicesexpected.Sort();
 			Assert.IsTrue(choicesactual.SequenceEqual(choicesexpected));
 		}
+
 		private void AddPollsToMockPersistor(List<Poll> list) {
 			for (int i = 0; i < list.Count; i++) {
 				Poll p = list[i];
@@ -100,6 +74,7 @@ namespace WerewolfDomainTests.PhaseTests.StoryPhase {
 			Phase newPhase = phase.StateHasChanged();
 			Assert.AreNotSame(phase, newPhase);
 		}
+
 		[Test, Combinatorial]
 		public void ShouldHidePollWhenResolved([Values(PollType.Werewolf)] PollType type) {
 
@@ -109,6 +84,13 @@ namespace WerewolfDomainTests.PhaseTests.StoryPhase {
 			poll.PlaceVote(storyteller, type);
 			phase.StateHasChanged();
 			Assert.IsTrue(mockPresenter.PollHidden);
+		}
+
+		public override void GivenPollClosedPhaseShouldResolve() {
+		}
+		public override void WhenPhaseResolvedShouldHidePoll() {
+		}
+		public override void ShouldRemovePollWhenPhaseResolved() {
 		}
 	}
 }

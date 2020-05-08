@@ -4,6 +4,7 @@ using System.Linq;
 using WerewolfDomain.Exceptions;
 using WerewolfDomain.Interfaces;
 using WerewolfDomain.Interfaces.Persisters;
+using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
 using WerewolfDomain.Structures.GameEvents;
 
@@ -58,12 +59,16 @@ namespace WerewolfDomain.Helpers {
 			List<Player> players = persistor.GetAllPlayers();
 			foreach (Player seer in poll.Voters) {
 				object choice;
+				SeerRevealEvent gameEvent;
 				if (poll.Votes.TryGetValue(seer, out choice)) {
 					Player chosen = players.Find(x => x.Name.Equals(choice));
 
-					SeerRevealEvent gameEvent = new SeerRevealEvent(new[] { seer }.ToList(), chosen.Name, chosen.Role.Name);
-					presentor.ShowEvent(gameEvent);
+					gameEvent = new SeerRevealEvent(new[] { seer }.ToList(), chosen.Name, chosen.Role.Name);
 				}
+				else {
+					gameEvent = new SeerRevealEvent(new[] { seer }.ToList(), null, RoleName.None);
+				}
+				presentor.ShowEvent(gameEvent);
 			}
 			persistor.RemovePoll(poll.Type);
 		}

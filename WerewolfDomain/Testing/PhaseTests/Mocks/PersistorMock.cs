@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using WerewolfDomain.Entities;
 using WerewolfDomain.Interfaces.Persisters;
 using WerewolfDomain.Phases.Shared;
+using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
 
 namespace WerewolfDomainTests.PhaseTests.Mocks {
@@ -41,6 +42,25 @@ namespace WerewolfDomainTests.PhaseTests.Mocks {
 
 
 		public bool PhaseSetup = false;
+
+		public PersistorMock() {
+			Player seer = new Player("1", "abby");
+			Player werewolf1 = new Player("2", "bob");
+			Player werewolf2 = new Player("3", "claire");
+			Player villager = new Player("4", "debra");
+			seer.Role = new Seer();
+			werewolf1.Role = new Werewolf();
+			werewolf2.Role = new Werewolf();
+			villager.Role = new Villager();
+			villager.IsStoryteller = true;
+			AllPlayers = new List<Player>() {
+				seer,
+				werewolf1,
+				werewolf2,
+				villager,
+			};
+		}
+
 		public bool IsPhaseSetup() {
 			return PhaseSetup;
 		}
