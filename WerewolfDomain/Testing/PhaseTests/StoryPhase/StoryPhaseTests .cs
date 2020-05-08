@@ -9,7 +9,6 @@ using WerewolfDomainTests.PhaseTests.Shared;
 
 namespace WerewolfDomainTests.PhaseTests.StoryPhase {
 	internal class StoryPhaseTests : PollPhaseTests {
-		public static List<PollType> PollsResolvedByStoryPhase = new List<PollType> { PollType.Werewolf };
 
 		private Player storyteller;
 
@@ -19,6 +18,7 @@ namespace WerewolfDomainTests.PhaseTests.StoryPhase {
 
 		[SetUp]
 		public void Setup() {
+
 			storyteller = villager;
 		}
 
@@ -29,10 +29,11 @@ namespace WerewolfDomainTests.PhaseTests.StoryPhase {
 				return;
 			}
 
+			mockPersister.Polls.Clear();
+			mockPersister.SetPhaseSetup(false);
 			AddPollsToMockPersistor(PollsForStoryPhase(werewolf));
 			phase.SetUp();
 			Poll poll = mockPersister.GetPoll(PollType.Storyteller);
-
 
 			List<PollType> choicesactual = poll.Choices.ConvertAll(obj => (PollType) obj);
 			choicesactual.Sort();
@@ -67,6 +68,8 @@ namespace WerewolfDomainTests.PhaseTests.StoryPhase {
 		[Test, Combinatorial]
 		public void ShouldResolveWhenLastPoll([Values(PollType.Werewolf)] PollType type) {
 
+			mockPersister.Polls.Clear();
+			mockPersister.SetPhaseSetup(false);
 			mockPersister.AddPoll(ConstructPoll(type));
 			phase.SetUp();
 			Poll poll = mockPersister.GetPoll(PollType.Storyteller);
@@ -78,6 +81,8 @@ namespace WerewolfDomainTests.PhaseTests.StoryPhase {
 		[Test, Combinatorial]
 		public void ShouldHidePollWhenResolved([Values(PollType.Werewolf)] PollType type) {
 
+			mockPersister.Polls.Clear();
+			mockPersister.SetPhaseSetup(false);
 			mockPersister.AddPoll(ConstructPoll(type));
 			phase.SetUp();
 			Poll poll = mockPersister.GetPoll(PollType.Storyteller);
