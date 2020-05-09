@@ -14,7 +14,6 @@ namespace PhaseTests.Mocks {
 			this.ShouldResolve = ShouldResolve;
 		}
 
-		public override int DefaultDurationSeconds => throw new NotImplementedException();
 
 		protected override bool CanResolve() {
 			CanResolveCalled = true;

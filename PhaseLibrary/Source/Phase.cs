@@ -8,9 +8,6 @@ namespace PhaseLibrary {
 		protected virtual bool IsSetup {
 			get => isSetup; set => isSetup = value;
 		}
-		public abstract int DefaultDurationSeconds {
-			get;
-		}
 
 
 		protected Phase(PhaseFactory factory) {
