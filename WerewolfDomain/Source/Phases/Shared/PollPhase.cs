@@ -16,7 +16,7 @@ namespace WerewolfDomain.Phases.Shared {
 			return polls;
 		}
 		protected abstract List<PollType> PollTypes();
-		protected PollPhase(PhaseFactory factory, Persister persistor, Presentor presentor) : base(factory, persistor, presentor) {
+		protected PollPhase(PhaseFactory factory, Persister persistor, Presenter presentor) : base(factory, persistor, presentor) {
 		}
 
 		protected override bool CanResolve() {
@@ -36,7 +36,7 @@ namespace WerewolfDomain.Phases.Shared {
 			});
 		}
 		protected override void CleanUp() {
-			presentor.HidePoll();
+			presentor.HidePolls();
 		}
 		protected abstract List<Poll> ConstructPolls();
 

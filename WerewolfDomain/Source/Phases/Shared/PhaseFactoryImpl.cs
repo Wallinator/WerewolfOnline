@@ -8,10 +8,10 @@ using WerewolfDomain.Interfaces.Persisters;
 namespace WerewolfDomain.Phases.Shared {
 	public class PhaseFactoryImpl : PhaseFactory {
 		private readonly Persister persistor;
-		private readonly Presentor presentor;
+		private readonly Presenter presentor;
 		private readonly Dictionary<PhaseType, bool> PhaseExists;
 
-		public PhaseFactoryImpl(Persister persistor, Presentor presentor, Dictionary<PhaseType, bool> phaseExists) {
+		public PhaseFactoryImpl(Persister persistor, Presenter presentor, Dictionary<PhaseType, bool> phaseExists) {
 			this.persistor = persistor;
 			this.presentor = presentor;
 			PhaseExists = phaseExists;

@@ -8,7 +8,7 @@ using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Phases {
 	internal class JuryPhase : PollPhase {
-		public JuryPhase(PhaseFactory factory, Persister persistor, Presentor presentor) : base(factory, persistor, presentor) {
+		public JuryPhase(PhaseFactory factory, Persister persistor, Presenter presentor) : base(factory, persistor, presentor) {
 		}
 
 		public override int DefaultDurationSeconds => 30;

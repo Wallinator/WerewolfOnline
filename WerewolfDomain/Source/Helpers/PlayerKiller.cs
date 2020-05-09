@@ -9,7 +9,7 @@ using WerewolfDomain.Structures.GameEvents;
 
 namespace WerewolfDomain.Helpers {
 	internal static class PlayerKiller {
-		internal static void Kill(Player player, EventType method, Persister persistor, Presentor presentor) {
+		internal static void Kill(Player player, EventType method, Persister persistor, Presenter presentor) {
 
 			GameEvent gameEvent = method switch
 			{

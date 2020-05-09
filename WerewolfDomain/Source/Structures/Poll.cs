@@ -93,10 +93,8 @@ namespace WerewolfDomain.Structures {
 	}
 	public enum PollType {
 		Werewolf,
-		Villager,
 		Seer,
 		Ready,
-		Sleep,
 		Storyteller,
 		Jury
 	}
