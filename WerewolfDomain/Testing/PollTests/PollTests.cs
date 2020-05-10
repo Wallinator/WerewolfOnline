@@ -14,11 +14,11 @@ namespace WerewolfDomainTests.PollTests {
 
 		[SetUp]
 		public void Setup() {
-			p1 = new Player("1", "a");
-			p2 = new Player("2", "b");
-			p3 = new Player("3", "c");
-			p4 = new Player("4", "d");
-			p5 = new Player("5", "e");
+			p1 = new Player("a");
+			p2 = new Player("b");
+			p3 = new Player("c");
+			p4 = new Player("d");
+			p5 = new Player("e");
 			var players = new List<Player>() { p1, p2, p3, p4, p5 };
 			var choices = new List<int>() { 1, 2, 3, 4, 5 };
 			poll = new Poll(players, choices, PollType.Ready);
@@ -38,7 +38,7 @@ namespace WerewolfDomainTests.PollTests {
 		}
 		[Test]
 		public void PollShouldNotCountVoteWhenVoterNotInPollList() {
-			var fakePlayer = new Player("33", "name");
+			var fakePlayer = new Player("name");
 			bool result = poll.PlaceVote(fakePlayer, 1);
 			Assert.IsFalse(result);
 		}

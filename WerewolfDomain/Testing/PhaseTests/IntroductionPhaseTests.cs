@@ -1,9 +1,6 @@
-using NUnit.Framework;
-using PhaseLibrary;
 using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
-using WerewolfDomainTests.PhaseTests.Mocks;
 using WerewolfDomainTests.PhaseTests.Shared;
 
 namespace WerewolfDomainTests.PhaseTests {
@@ -11,7 +8,7 @@ namespace WerewolfDomainTests.PhaseTests {
 
 		protected override PhaseType PhaseType => PhaseType.Introduction;
 
-		protected override Poll SamplePoll => new Poll(	mockPersister.GetAllPlayers().FindAll(p => p.Role.Name!= RoleName.Spectator),
+		protected override Poll SamplePoll => new Poll(mockPersister.GetAllPlayers().FindAll(p => p.Role.Name != RoleName.Spectator),
 														mockPresenter.GetIntroductionPollOptions(),
 														PollType.Ready);
 	}

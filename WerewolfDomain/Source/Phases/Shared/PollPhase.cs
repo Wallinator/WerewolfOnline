@@ -41,7 +41,7 @@ namespace WerewolfDomain.Phases.Shared {
 		protected abstract List<Poll> ConstructPolls();
 
 		protected override void PreForceResolve() {
-			GetMyPolls().ForEach(poll => { 
+			GetMyPolls().ForEach(poll => {
 				poll.ClosePoll();
 			});
 		}

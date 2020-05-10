@@ -1,9 +1,7 @@
 ﻿using NUnit.Framework;
 using PhaseLibrary;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;

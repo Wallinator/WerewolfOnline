@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using PhaseLibrary;
 using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
@@ -9,7 +8,7 @@ using WerewolfDomainTests.PhaseTests.Shared;
 namespace WerewolfDomainTests.PhaseTests {
 	internal class JuryPhaseTests : PollPhaseTests {
 
-		protected override Poll SamplePoll => new Poll(	mockPersister.GetAllPlayers().FindAll(x => x.Role.Name != RoleName.Spectator),
+		protected override Poll SamplePoll => new Poll(mockPersister.GetAllPlayers().FindAll(x => x.Role.Name != RoleName.Spectator),
 														mockPersister.GetAllPlayers().FindAll(x => x.Role.Name != RoleName.Spectator)
 																					 .ConvertAll(player => player.Name),
 														PollType.Jury);

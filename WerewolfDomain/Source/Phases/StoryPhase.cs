@@ -1,5 +1,4 @@
 ﻿using PhaseLibrary;
-using System;
 using System.Collections.Generic;
 using WerewolfDomain.Interfaces;
 using WerewolfDomain.Interfaces.Persisters;
@@ -31,7 +30,7 @@ namespace WerewolfDomain.Phases {
 		}
 
 		protected override List<PollType> PollTypes() {
-			return new List<PollType>{ PollType.Storyteller };
+			return new List<PollType> { PollType.Storyteller };
 		}
 
 		protected override List<Poll> ConstructPolls() {

@@ -1,5 +1,4 @@
 ﻿using PhaseLibrary;
-using System;
 using System.Collections.Generic;
 using WerewolfDomain.Exceptions;
 using WerewolfDomain.Interfaces;

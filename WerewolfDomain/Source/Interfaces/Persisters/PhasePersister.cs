@@ -1,5 +1,4 @@
-﻿using PhaseLibrary;
-using WerewolfDomain.Phases.Shared;
+﻿using WerewolfDomain.Phases.Shared;
 
 namespace WerewolfDomain.Interfaces.Persisters {
 	public interface PhasePersister {

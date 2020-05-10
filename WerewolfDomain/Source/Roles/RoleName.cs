@@ -1,5 +1,5 @@
 ﻿namespace WerewolfDomain.Roles {
-	internal enum RoleName {
+	public enum RoleName {
 		//None must be on top
 		None,
 		Spectator,

@@ -5,7 +5,7 @@ using WerewolfDomain.Structures;
 using WerewolfDomainTests.PhaseTests.Shared;
 
 namespace WerewolfDomainTests.PhaseTests {
-	internal class WerewolfPhaseTests : PollPhaseTests{
+	internal class WerewolfPhaseTests : PollPhaseTests {
 
 		protected override Poll SamplePoll => new Poll(mockPersister.GetAllPlayers().FindAll(x => x.Role.Name == RoleName.Werewolf),
 														mockPersister.GetAllPlayers().FindAll(x => x.Role.Name != RoleName.Werewolf &&

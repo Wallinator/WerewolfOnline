@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Structures;
-using WerewolfDomainTests.PhaseTests.Mocks;
 using WerewolfDomainTests.PhaseTests.Shared;
 
 namespace WerewolfDomainTests.PhaseTests.StoryPhase {

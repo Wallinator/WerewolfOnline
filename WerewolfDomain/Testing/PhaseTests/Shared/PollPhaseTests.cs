@@ -1,14 +1,9 @@
 ﻿using NUnit.Framework;
 using PhaseLibrary;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using WerewolfDomain.Phases.Shared;
-using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
-using WerewolfDomainTests.PhaseTests.Mocks;
 
 namespace WerewolfDomainTests.PhaseTests.Shared {
 	internal abstract class PollPhaseTests : PhaseSetup {

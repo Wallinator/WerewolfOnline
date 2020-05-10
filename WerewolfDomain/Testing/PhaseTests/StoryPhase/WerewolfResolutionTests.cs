@@ -1,12 +1,9 @@
 ﻿using NUnit.Framework;
 using PhaseLibrary;
-using System.Collections.Generic;
-using System.Linq;
 using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
 using WerewolfDomain.Structures.GameEvents;
-using WerewolfDomainTests.PhaseTests.Mocks;
 using WerewolfDomainTests.PhaseTests.Shared;
 
 namespace WerewolfDomainTests.PhaseTests.StoryPhase {

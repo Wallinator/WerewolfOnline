@@ -1,19 +1,16 @@
 ﻿using NUnit.Framework;
-using PhaseLibrary;
-using System.Collections.Generic;
 using System.Linq;
 using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Roles;
 using WerewolfDomain.Structures;
 using WerewolfDomain.Structures.GameEvents;
-using WerewolfDomainTests.PhaseTests.Mocks;
 using WerewolfDomainTests.PhaseTests.Shared;
 
 namespace WerewolfDomainTests.PhaseTests {
 	internal class SeerPhaseTests : PollPhaseTests {
-		protected override Poll SamplePoll => new Poll(	mockPersister.GetAllPlayers()	.FindAll(x => x.Role.Name == RoleName.Seer),
-														mockPersister.GetAllPlayers()	.FindAll(x =>	x.Role.Name != RoleName.Seer &&
-																									x.Role.Name != RoleName.Spectator)
+		protected override Poll SamplePoll => new Poll(mockPersister.GetAllPlayers().FindAll(x => x.Role.Name == RoleName.Seer),
+														mockPersister.GetAllPlayers().FindAll(x => x.Role.Name != RoleName.Seer &&
+																								 x.Role.Name != RoleName.Spectator)
 																						.ConvertAll(player => player.Name),
 														PollType.Seer);
 
