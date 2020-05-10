@@ -1,6 +1,6 @@
 ﻿using System;
 
 namespace WerewolfDomain.Exceptions {
-	internal class InvalidPollTypeException : Exception {
+	public class InvalidPollTypeException : Exception {
 	}
 }

@@ -8,10 +8,10 @@ using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Phases {
 	internal class SeerPhase : PollPhase {
-		public SeerPhase(PhaseFactory factory, Persister persistor, Presenter presentor) : base(factory, persistor, presentor) {
+		internal SeerPhase(PhaseFactory factory, Persister persistor, Presenter presentor) : base(factory, persistor, presentor) {
 		}
 
-		public override int DefaultDurationSeconds => 30;
+		internal override int DefaultDurationSeconds => 30;
 
 		internal override PhaseType PhaseType => PhaseType.Seer;
 

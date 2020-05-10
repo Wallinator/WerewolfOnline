@@ -1,6 +1,6 @@
 ﻿namespace WerewolfDomain.Roles {
-	public class Villager : Role {
-		public Villager() {
+	internal class Villager : Role {
+		internal Villager() {
 			Name = RoleName.Villager;
 		}
 	}

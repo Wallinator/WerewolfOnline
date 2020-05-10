@@ -3,10 +3,16 @@ using WerewolfDomain.Phases.Shared;
 
 namespace WerewolfDomain.Interfaces.Persisters {
 	public interface PhasePersister {
-		void AddNextPhase(Phase phase);
-		Phase GetNextPhase(PhaseType currentPhaseType);
+		bool NextPhaseTypeExists();
+		void PushNextPhaseType(PhaseType type);
+		PhaseType PopNextPhaseType();
+
 		bool IsPhaseSetup();
-		bool NextPhaseExists();
 		void SetPhaseSetup(bool IsSetup);
+
+		PhaseType GetCurrentPhaseType();
+		void SetCurrentPhaseType(PhaseType type);
+		PhaseType GetLastOrderedPhaseType();
+		void SetLastOrderedPhaseType(PhaseType phaseType);
 	}
 }

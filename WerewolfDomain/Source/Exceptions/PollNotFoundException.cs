@@ -1,6 +1,6 @@
 ﻿using System;
 
 namespace WerewolfDomain.Exceptions {
-	internal class PollNotFoundException : Exception {
+	public class PollNotFoundException : Exception {
 	}
 }

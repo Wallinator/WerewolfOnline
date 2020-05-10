@@ -3,7 +3,7 @@ using WerewolfDomain.Interfaces;
 using WerewolfDomain.Interfaces.Persisters;
 
 namespace WerewolfDomain.Phases.Shared {
-	public abstract class AbstractPhase : Phase {
+	internal abstract class AbstractPhase : Phase {
 
 
 		protected readonly Persister persistor;
@@ -11,7 +11,7 @@ namespace WerewolfDomain.Phases.Shared {
 		internal abstract PhaseType PhaseType {
 			get;
 		}
-		public abstract int DefaultDurationSeconds {
+		internal abstract int DefaultDurationSeconds {
 			get;
 		}
 

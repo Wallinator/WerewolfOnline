@@ -1,6 +1,6 @@
 ﻿namespace WerewolfDomain.Roles {
-	public class Werewolf : Role {
-		public Werewolf() {
+	internal class Werewolf : Role {
+		internal Werewolf() {
 			Name = RoleName.Werewolf;
 		}
 	}

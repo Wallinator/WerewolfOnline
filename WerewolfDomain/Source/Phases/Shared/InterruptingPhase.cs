@@ -1,5 +1,5 @@
 ﻿namespace WerewolfDomain.Phases.Shared {
-	public interface InterruptingPhase {
+	internal interface InterruptingPhase {
 		PhaseType PhaseInterrupted {
 			get;
 		}

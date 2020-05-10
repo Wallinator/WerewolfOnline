@@ -2,9 +2,9 @@
 using WerewolfDomain.Structures;
 
 namespace WerewolfDomain.Roles {
-	public class Seer : Role {
-		public List<Player> Checked = new List<Player>();
-		public Seer() {
+	internal class Seer : Role {
+		internal List<Player> Checked = new List<Player>();
+		internal Seer() {
 			Name = RoleName.Seer;
 		}
 	}

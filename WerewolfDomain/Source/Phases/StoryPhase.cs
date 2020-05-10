@@ -9,17 +9,17 @@ using WerewolfDomain.Structures;
 namespace WerewolfDomain.Phases {
 	internal class StoryPhase : PollPhase {
 
-		public static List<PollType> PollsResolvedByStoryteller = new List<PollType> {
+		private readonly List<PollType> PollsResolvedByStoryteller = new List<PollType> {
 			PollType.Werewolf
 		};
 
-		public StoryPhase(PhaseFactory factory, Persister persistor, Presenter presentor) : base(factory, persistor, presentor) {
+		internal StoryPhase(PhaseFactory factory, Persister persistor, Presenter presentor) : base(factory, persistor, presentor) {
 
 		}
 
 		internal override PhaseType PhaseType => PhaseType.Story;
 
-		public override int DefaultDurationSeconds => 0;
+		internal override int DefaultDurationSeconds => 0;
 
 		protected override Phase NextPhase() {
 			if (GetRemainingPolls().Count == 0) {

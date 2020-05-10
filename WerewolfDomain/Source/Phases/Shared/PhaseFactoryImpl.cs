@@ -22,23 +22,16 @@ namespace WerewolfDomain.Phases.Shared {
 		}
 
 		public override Phase MakeNextPhase(Phase phase) {
-			PhaseType currentPhaseType;
-			if (phase is InterruptingPhase) {
-				currentPhaseType = ((InterruptingPhase) phase).PhaseInterrupted;
+			if (persistor.NextPhaseTypeExists()) {
+				return ConstructPhase(persistor.PopNextPhaseType());
 			}
-			else {
-				AbstractPhase abstractPhase = (AbstractPhase) phase;
-				currentPhaseType = abstractPhase.PhaseType;
-			}
-
-			if (persistor.NextPhaseExists()) {
-				return persistor.GetNextPhase(currentPhaseType);
-			}
+			PhaseType currentPhaseType = persistor.GetLastOrderedPhaseType();
 			return NewPhase(currentPhaseType + 1);
 		}
 
 		private Phase NewPhase(PhaseType phaseType) {
 			if (PhaseExists[phaseType]) {
+				persistor.SetLastOrderedPhaseType(phaseType);
 				return ConstructPhase(phaseType);
 			}
 			else {
@@ -48,6 +41,7 @@ namespace WerewolfDomain.Phases.Shared {
 
 		public Phase ConstructPhase(PhaseType phaseType) {
 			persistor.SetPhaseSetup(false);
+			persistor.SetCurrentPhaseType(phaseType);
 			return phaseType switch
 			{
 				PhaseType.Introduction => new IntroductionPhase(this, persistor, presentor),
@@ -58,6 +52,7 @@ namespace WerewolfDomain.Phases.Shared {
 				PhaseType.Jury => new JuryPhase(this, persistor, presentor),
 				PhaseType.Bedtime => new BedtimePhase(this, persistor, presentor),
 				PhaseType.Wrapper => new WerewolfPhase(this, persistor, presentor),
+				//wrapper should point to first phase in night
 				_ => throw new InvalidPhaseTypeException(),
 			};
 		}

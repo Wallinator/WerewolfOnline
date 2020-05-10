@@ -10,7 +10,7 @@ using WerewolfDomain.Structures.GameEvents;
 
 namespace WerewolfDomain.Helpers {
 	internal static class PollResolver {
-		public static void Resolve(Poll poll, Persister persistor, Presenter presentor) {
+		internal static void Resolve(Poll poll, Persister persistor, Presenter presentor) {
 			switch (poll.Type) {
 				case PollType.Ready:
 					ResolveReady(poll, persistor, presentor);

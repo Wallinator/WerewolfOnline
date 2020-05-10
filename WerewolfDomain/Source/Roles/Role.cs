@@ -1,6 +1,6 @@
 ﻿namespace WerewolfDomain.Roles {
-	public class Role {
-		public RoleName Name = RoleName.None;
+	internal class Role {
+		internal RoleName Name = RoleName.None;
 	}
 }
 

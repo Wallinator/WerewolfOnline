@@ -1,11 +1,11 @@
 ﻿namespace WerewolfDomain.Roles {
-	public class Spectator : Role {
-		public Role OldRole;
-		public Spectator() {
+	internal class Spectator : Role {
+		internal Role OldRole;
+		internal Spectator() {
 			OldRole = new Role();
 			Name = RoleName.Spectator;
 		}
-		public Spectator(Role oldRole) {
+		internal Spectator(Role oldRole) {
 			OldRole = oldRole;
 			Name = RoleName.Spectator;
 		}

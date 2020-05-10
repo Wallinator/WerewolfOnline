@@ -28,26 +28,39 @@ namespace WerewolfDomainTests.PhaseTests.Mocks {
 		}
 
 
-		public Stack<Phase> NextPhases = new Stack<Phase>();
-		public Phase GetNextPhase(PhaseType currentPhaseType) {
+		public Stack<PhaseType> NextPhases = new Stack<PhaseType>();
+		PhaseType PhasePersister.PopNextPhaseType() {
 			return NextPhases.Pop();
 		}
-		public void AddNextPhase(Phase phase) {
+		void PhasePersister.PushNextPhaseType(PhaseType phase) {
 			NextPhases.Push(phase);
 		}
-
-		public bool NextPhaseExists() {
+		bool PhasePersister.NextPhaseTypeExists() {
 			return NextPhases.Count != 0;
+		}
+		public PhaseType CurrentPhase;
+		PhaseType PhasePersister.GetCurrentPhaseType() {
+			return CurrentPhase;
+		}
+		void PhasePersister.SetCurrentPhaseType(PhaseType type) {
+			CurrentPhase = type;
+		}
+		public PhaseType LastOrderedPhase;
+		PhaseType PhasePersister.GetLastOrderedPhaseType() {
+			return LastOrderedPhase;
+		}
+		void PhasePersister.SetLastOrderedPhaseType(PhaseType phaseType) {
+			LastOrderedPhase = phaseType;
 		}
 
 
 		public bool PhaseSetup = false;
 
 		public PersistorMock() {
-			Player seer = new Player("1", "abby");
-			Player werewolf1 = new Player("2", "bob");
-			Player werewolf2 = new Player("3", "claire");
-			Player villager = new Player("4", "debra");
+			Player seer = new Player("abby");
+			Player werewolf1 = new Player("bob");
+			Player werewolf2 = new Player("claire");
+			Player villager = new Player("debra");
 			seer.Role = new Seer();
 			werewolf1.Role = new Werewolf();
 			werewolf2.Role = new Werewolf();

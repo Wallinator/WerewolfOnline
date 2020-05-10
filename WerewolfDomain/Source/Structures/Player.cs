@@ -3,15 +3,13 @@ using WerewolfDomain.Roles;
 
 namespace WerewolfDomain.Structures {
 	public class Player {
-		public string Id;
 		public string Name;
 		public bool IsStoryteller = false;
 		public Role Role = new Role();
-		public Player(string id, string name) {
-			Id = id;
+		public Player(string name) {
 			Name = name;
 		}
-		public Player(Player player) : this(player.Id, player.Name) {
+		public Player(Player player) : this(player.Name) {
 			Role = player.Role;
 			IsStoryteller = player.IsStoryteller;
 		}
@@ -22,12 +20,11 @@ namespace WerewolfDomain.Structures {
 
 		public override bool Equals(object obj) {
 			return obj is Player player &&
-				   Id == player.Id &&
 				   Name == player.Name;
 		}
 
 		public override int GetHashCode() {
-			return HashCode.Combine(Id, Name);
+			return HashCode.Combine(Name);
 		}
 	}
 }

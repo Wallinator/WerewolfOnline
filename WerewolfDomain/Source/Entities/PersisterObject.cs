@@ -34,14 +34,14 @@ namespace WerewolfDomain.Entities {
 		}
 
 
-		public Stack<Phase> NextPhases = new Stack<Phase>();
-		Phase PhasePersister.GetNextPhase(PhaseType currentPhaseType) {
+		public Stack<PhaseType> NextPhases = new Stack<PhaseType>();
+		PhaseType PhasePersister.PopNextPhaseType() {
 			return NextPhases.Pop();
 		}
-		void PhasePersister.AddNextPhase(Phase phase) {
+		void PhasePersister.PushNextPhaseType(PhaseType phase) {
 			NextPhases.Push(phase);
 		}
-		bool PhasePersister.NextPhaseExists() {
+		bool PhasePersister.NextPhaseTypeExists() {
 			return NextPhases.Count != 0;
 		}
 
@@ -53,6 +53,20 @@ namespace WerewolfDomain.Entities {
 		void PhasePersister.SetPhaseSetup(bool Setup) {
 			PhaseSetup = Setup;
 		}
+		public PhaseType CurrentPhase;
+		PhaseType PhasePersister.GetCurrentPhaseType() {
+			return CurrentPhase;
+		}
+		void PhasePersister.SetCurrentPhaseType(PhaseType type) {
+			CurrentPhase = type;
+		}
 
+		public PhaseType LastOrderedPhase;
+		PhaseType PhasePersister.GetLastOrderedPhaseType() {
+			return LastOrderedPhase;
+		}
+		void PhasePersister.SetLastOrderedPhaseType(PhaseType phaseType) {
+			LastOrderedPhase = phaseType;
+		}
 	}
 }
