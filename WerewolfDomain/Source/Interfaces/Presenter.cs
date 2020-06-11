@@ -4,7 +4,7 @@ using WerewolfDomain.Structures.GameEvents;
 
 namespace WerewolfDomain.Interfaces {
 	public interface Presenter {
-		void ShowPoll(Poll poll);
+		void ShowPoll(List<Player> players, List<string> options);
 		void HidePolls();
 		void ShowEvent(GameEvent gameEvent);
 		IEnumerable<string> GetDiscussionPollOptions();

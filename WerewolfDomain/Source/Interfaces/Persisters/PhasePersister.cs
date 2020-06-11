@@ -2,9 +2,9 @@
 
 namespace WerewolfDomain.Interfaces.Persisters {
 	public interface PhasePersister {
-		bool NextPhaseTypeExists();
-		void PushNextPhaseType(PhaseType type);
-		PhaseType PopNextPhaseType();
+		bool InterruptingPhaseTypeExists();
+		void PushInterruptingPhaseType(PhaseType type);
+		PhaseType PopInterruptingPhaseType();
 
 		bool IsPhaseSetup();
 		void SetPhaseSetup(bool IsSetup);

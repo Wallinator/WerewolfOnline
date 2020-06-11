@@ -87,7 +87,7 @@ namespace WerewolfDomainTests.PhaseTests.StoryPhase {
 			Poll poll = mockPersister.GetPoll(PollType.Storyteller);
 			poll.PlaceVote(storyteller, type);
 			phase.StateHasChanged();
-			Assert.IsTrue(mockPresenter.PollHidden);
+			Assert.AreEqual(0, mockPresenter.PlayersShownPoll.Count);
 		}
 
 		public override void GivenPollClosedPhaseShouldResolve() {

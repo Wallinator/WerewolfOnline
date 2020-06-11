@@ -2,6 +2,7 @@
 using PhaseLibrary;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using WerewolfDomain.Phases.Shared;
 using WerewolfDomain.Structures;
 
@@ -30,8 +31,12 @@ namespace WerewolfDomainTests.PhaseTests.Shared {
 
 		[Test]
 		public virtual void WhenPollAddedShouldBePresented() {
+			Assert.IsTrue(mockPresenter.PollShown);
+		}
+		[Test]
+		public virtual void WhenPollAddedShouldBePresentedToCorrectPlayers() {
 			Poll poll = mockPersister.GetPoll(PollType);
-			Assert.AreEqual(poll, mockPresenter.PollShown);
+			Assert.IsTrue(mockPresenter.PlayersShownPoll.SequenceEqual(poll.Voters));
 		}
 		[Test]
 		public virtual void WhenPollAddedShouldBeTypeReady() {
@@ -67,7 +72,7 @@ namespace WerewolfDomainTests.PhaseTests.Shared {
 			Poll poll = mockPersister.GetPoll(PollType);
 			poll.ClosePoll();
 			phase.StateHasChanged();
-			Assert.IsTrue(mockPresenter.PollHidden);
+			Assert.AreEqual(0, mockPresenter.PlayersShownPoll.Count);
 		}
 		[Test]
 		public virtual void ShouldRemovePollWhenPhaseResolved() {

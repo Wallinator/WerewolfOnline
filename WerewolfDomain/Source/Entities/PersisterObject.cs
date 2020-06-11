@@ -34,13 +34,13 @@ namespace WerewolfDomain.Entities {
 
 
 		public Stack<PhaseType> NextPhases = new Stack<PhaseType>();
-		PhaseType PhasePersister.PopNextPhaseType() {
+		PhaseType PhasePersister.PopInterruptingPhaseType() {
 			return NextPhases.Pop();
 		}
-		void PhasePersister.PushNextPhaseType(PhaseType phase) {
+		void PhasePersister.PushInterruptingPhaseType(PhaseType phase) {
 			NextPhases.Push(phase);
 		}
-		bool PhasePersister.NextPhaseTypeExists() {
+		bool PhasePersister.InterruptingPhaseTypeExists() {
 			return NextPhases.Count != 0;
 		}
 

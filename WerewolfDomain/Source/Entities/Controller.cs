@@ -9,32 +9,28 @@ namespace WerewolfDomain.Entities {
 		private readonly Persister persister;
 		private readonly Presenter presenter;
 		private readonly PhaseFactoryImpl factory;
-		private readonly Action<object, int> StartTimer;
-		private readonly Action<object> CancelTimer;
-		private readonly object Timer;
+		private readonly PhaseTimer Timer;
 
-		public Controller(Persister persister, Presenter presenter, PhaseFactoryImpl factory, Action<object, int> startTimer, Action<object> cancelTimer, object timer) {
+		public Controller(Persister persister, Presenter presenter, PhaseFactoryImpl factory, PhaseTimer timer) {
 			this.persister = persister;
 			this.presenter = presenter;
 			this.factory = factory;
-			StartTimer = startTimer;
-			CancelTimer = cancelTimer;
 			Timer = timer;
 		}
 
 		private AbstractPhase Phase {
 			get {
 				if (Phase.Equals(null)) {
-					Phase = factory.ConstructPhase(persister.GetCurrentPhaseType()) as AbstractPhase;
+					Phase = (AbstractPhase) factory.ConstructPhase(persister.GetCurrentPhaseType()) ;
 				}
 				return Phase;
 			}
 			set {
-				CancelTimer(Timer);
 				if (!ReferenceEquals(Phase, value)) {
+					Timer.Cancel();
 					Phase = value;
 					Phase.SetUp();
-					StartTimer(Timer, Phase.DefaultDurationSeconds);
+					Timer.Start(Phase.DefaultDurationSeconds);
 				}
 			}
 		}
@@ -43,10 +39,10 @@ namespace WerewolfDomain.Entities {
 			StateHasChanged();
 		}
 		public void ForceResolve() {
-			Phase = Phase.ForceResolve() as AbstractPhase;
+			Phase = (AbstractPhase) Phase.ForceResolve();
 		}
 		public void StateHasChanged() {
-			Phase = Phase.StateHasChanged() as AbstractPhase;
+			Phase = (AbstractPhase) Phase.StateHasChanged();
 		}
 	}
 }

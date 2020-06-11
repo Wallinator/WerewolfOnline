@@ -21,8 +21,8 @@ namespace WerewolfDomain.Phases.Shared {
 		}
 
 		public override Phase MakeNextPhase(Phase phase) {
-			if (persistor.NextPhaseTypeExists()) {
-				return ConstructPhase(persistor.PopNextPhaseType());
+			if (persistor.InterruptingPhaseTypeExists()) {
+				return ConstructPhase(persistor.PopInterruptingPhaseType());
 			}
 			PhaseType currentPhaseType = persistor.GetLastOrderedPhaseType();
 			return NewPhase(currentPhaseType + 1);

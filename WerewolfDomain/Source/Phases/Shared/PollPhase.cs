@@ -1,5 +1,6 @@
 ﻿using PhaseLibrary;
 using System.Collections.Generic;
+using System.Linq;
 using WerewolfDomain.Helpers;
 using WerewolfDomain.Interfaces;
 using WerewolfDomain.Interfaces.Persisters;
@@ -32,7 +33,7 @@ namespace WerewolfDomain.Phases.Shared {
 		protected override void PhaseSetUp() {
 			ConstructPolls().ForEach(poll => {
 				persistor.AddPoll(poll);
-				presentor.ShowPoll(poll);
+				presentor.ShowPoll(poll.Voters.ToList(), poll.Choices.ConvertAll(c => c.ToString()));
 			});
 		}
 		protected override void CleanUp() {
